@@ -19,5 +19,7 @@ namespace TPC_EcoSupport.Models
         public string? Telefone { get; set; }
         [Column("ENDERECO")]
         public string? Endereco { get; set; }
+        public ICollection<Contratos> Contratos { get; set; }
+        public ICollection<Servicos> Servicos { get; set; }
     }
 }
