@@ -17,12 +17,11 @@ public partial class TbTermosCondicoes
     [Column("ACEITOU")]
     [StringLength(1)]
     [Unicode(false)]
-    public string? Aceitou { get; set; }
+    public string? Aceitou { get; set; } // 'S' ou 'N'
 
     [Column("DATA_ACEITE", TypeName = "DATE")]
     public DateTime? DataAceite { get; set; }
 
     [ForeignKey("IdUsuario")]
-    [InverseProperty("TbTermosCondicos")]
-    public virtual TbUsuarios? IdUsuarioNavigation { get; set; }
+    public virtual TbUsuarios Usuario { get; set; }
 }

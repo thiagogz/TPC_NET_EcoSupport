@@ -14,89 +14,131 @@ namespace TPC_EcoSupport.Controllers
             _context = context;
         }
 
-        public IActionResult Transacoes()
+        // GET: TbTransacoes
+        public async Task<IActionResult> Transacoes()
         {
-            return View();
+            return View(await _context.Transacoes.ToListAsync());
         }
 
-        public IActionResult GetTransacoes()
-        {
-            var transacoes = _context.Transacoes.ToListAsync();
-            if (transacoes == null)
-            {
-                return BadRequest("Transações não encontradas!");
-            }
-            return (IActionResult)transacoes;
-        }
-
-        public IActionResult GetTransacoesById(decimal? id)
+        // GET: TbTransacoes/Details/5
+        public async Task<IActionResult> Details(decimal? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var transacoes = _context.Transacoes
+            var tbTransacoes = await _context.Transacoes
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (transacoes == null)
+            if (tbTransacoes == null)
             {
                 return NotFound();
             }
 
-            return (IActionResult)transacoes;
+            return View(tbTransacoes);
         }
 
+        // GET: TbTransacoes/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: TbTransacoes/Create
         [HttpPost]
-        public IActionResult CreateTransacao([FromBody] TbTransacoes request)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Id,IdContrato,Data,Valor,Descricao")] TbTransacoes tbTransacoes)
         {
-            TbTransacoes newTransacoes = new TbTransacoes
+            if (ModelState.IsValid)
             {
-                IdContrato = request.IdContrato,
-                Data = request.Data,
-                Valor = request.Valor,
-                Descricao = request.Descricao
-            };
-            _context.Transacoes.Add(newTransacoes);
-            _context.SaveChanges();
-            return RedirectToAction("Index", "Home");
+                _context.Add(tbTransacoes);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(tbTransacoes);
         }
 
-        [HttpPut("{id}")]
-        public IActionResult UpdateTransacao(decimal id, [FromBody] TbTransacoes request)
+        // GET: TbTransacoes/Edit/5
+        public async Task<IActionResult> Edit(decimal? id)
         {
-            var transacoes = _context.Transacoes.Find(id);
-
-            if (transacoes == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            transacoes.IdContrato = request.IdContrato;
-            transacoes.Data = request.Data;
-            transacoes.Valor = request.Valor;
-            transacoes.Descricao = request.Descricao != null ? request.Descricao : transacoes.Descricao;
-
-            _context.Transacoes.Update(transacoes);
-            _context.SaveChanges();
-
-            return RedirectToAction("Index", "Home");
+            var tbTransacoes = await _context.Transacoes.FindAsync(id);
+            if (tbTransacoes == null)
+            {
+                return NotFound();
+            }
+            return View(tbTransacoes);
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult DeleteTransacoes(decimal id)
+        // POST: TbTransacoes/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(decimal id, [Bind("Id,IdContrato,Data,Valor,Descricao")] TbTransacoes tbTransacoes)
         {
-            var transacao = _context.Transacoes.Find(id);
-
-            if (transacao == null)
+            if (id != tbTransacoes.Id)
             {
                 return NotFound();
             }
 
-            _context.Transacoes.Remove(transacao);
-            _context.SaveChanges();
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(tbTransacoes);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!TbTransacoesExists(tbTransacoes.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(tbTransacoes);
+        }
 
-            return RedirectToAction("Index", "Home");
+        // GET: TbTransacoes/Delete/5
+        public async Task<IActionResult> Delete(decimal? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var tbTransacoes = await _context.Transacoes
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (tbTransacoes == null)
+            {
+                return NotFound();
+            }
+
+            return View(tbTransacoes);
+        }
+
+        // POST: TbTransacoes/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(decimal id)
+        {
+            var tbTransacoes = await _context.Transacoes.FindAsync(id);
+            _context.Transacoes.Remove(tbTransacoes);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        private bool TbTransacoesExists(decimal id)
+        {
+            return _context.Transacoes.Any(e => e.Id == id);
         }
     }
 }
-

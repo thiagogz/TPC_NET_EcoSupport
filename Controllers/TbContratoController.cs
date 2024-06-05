@@ -14,96 +14,131 @@ namespace TPC_EcoSupport.Controllers
             _context = context;
         }
 
-        public IActionResult Contratos()
+        // GET: TbContratos
+        public async Task<IActionResult> Contratos()
         {
-            return View();
+            return View(await _context.Contratos.ToListAsync());
         }
 
-        public IActionResult GetContratos()
-        {
-            var contratos = _context.Contratos.ToListAsync();
-            if (contratos == null)
-            {
-                return BadRequest("Pontos não encontrados!");
-            }
-            return (IActionResult)contratos;
-        }
-
-        public IActionResult GetContratosById(decimal? id)
+        // GET: TbContratos/Details/5
+        public async Task<IActionResult> Details(decimal? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var contratoSelecionado = _context.Contratos
+            var tbContratos = await _context.Contratos
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (contratoSelecionado == null)
+            if (tbContratos == null)
             {
                 return NotFound();
             }
 
-            return (IActionResult)contratoSelecionado;
+            return View(tbContratos);
         }
 
+        // GET: TbContratos/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: TbContratos/Create
         [HttpPost]
-        public IActionResult CreateContrato([FromBody] TbContratos request)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Id,IdEmpresa,TipoContrato,DataInicio,DataFim,Valor,Status,AssinaturaPendente")] TbContratos tbContratos)
         {
-            TbContratos newContrato = new TbContratos
+            if (ModelState.IsValid)
             {
-                IdEmpresa = request.IdEmpresa,
-                TipoContrato = request.TipoContrato,
-                DataInicio = request.DataInicio,
-                DataFim = request.DataFim,
-                Valor = request.Valor,
-                Status = request.Status,
-                AssinaturaPendente = request.AssinaturaPendente
-            };
-            _context.Add(newContrato);
-            _context.SaveChanges();
-            return RedirectToAction("Index", "Home");
+                _context.Add(tbContratos);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(tbContratos);
         }
 
-        [HttpPut("{id}")]
-        public IActionResult UpdateContrato(decimal id, [FromBody] TbContratos request)
+        // GET: TbContratos/Edit/5
+        public async Task<IActionResult> Edit(decimal? id)
         {
-            var getContrato = _context.Contratos.Find(id);
-
-            if (getContrato == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            getContrato.IdEmpresa = request.IdEmpresa != null ? request.IdEmpresa : getContrato.IdEmpresa;
-            getContrato.TipoContrato = request.TipoContrato != null ? request.TipoContrato : getContrato.TipoContrato;
-            getContrato.DataInicio = request.DataInicio != null ? request.DataInicio : getContrato.DataInicio;
-            getContrato.DataFim = request.DataFim != null ? request.DataFim : getContrato.DataFim;
-            getContrato.Valor = request.Valor != null ? request.Valor : getContrato.Valor;
-            getContrato.Status = request.Status != null ? request.Status : getContrato.Status;
-            getContrato.AssinaturaPendente = request.AssinaturaPendente != null ? request.AssinaturaPendente : getContrato.AssinaturaPendente;
-
-            _context.Contratos.Update(getContrato);
-            _context.SaveChanges();
-
-            return RedirectToAction("Index", "Home");
+            var tbContratos = await _context.Contratos.FindAsync(id);
+            if (tbContratos == null)
+            {
+                return NotFound();
+            }
+            return View(tbContratos);
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult DeleteContrato(decimal id)
+        // POST: TbContratos/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(decimal id, [Bind("Id,IdEmpresa,TipoContrato,DataInicio,DataFim,Valor,Status,AssinaturaPendente")] TbContratos tbContratos)
         {
-            var getContrato = _context.Contratos.Find(id);
-
-            if (getContrato == null)
+            if (id != tbContratos.Id)
             {
                 return NotFound();
             }
 
-            getContrato.Status = "Cancelado";
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(tbContratos);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!TbContratosExists(tbContratos.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(tbContratos);
+        }
 
-            _context.Contratos.Update(getContrato);
-            _context.SaveChanges();
+        // GET: TbContratos/Delete/5
+        public async Task<IActionResult> Delete(decimal? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-            return RedirectToAction("Index", "Home");
+            var tbContratos = await _context.Contratos
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (tbContratos == null)
+            {
+                return NotFound();
+            }
+
+            return View(tbContratos);
+        }
+
+        // POST: TbContratos/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(decimal id)
+        {
+            var tbContratos = await _context.Contratos.FindAsync(id);
+            _context.Contratos.Remove(tbContratos);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        private bool TbContratosExists(decimal id)
+        {
+            return _context.Contratos.Any(e => e.Id == id);
         }
     }
 }

@@ -14,24 +14,18 @@ public partial class TbPessoasFisicas
 
     [Column("NOME")]
     [StringLength(100)]
-    [Unicode(false)]
-    public string Nome { get; set; } = null!;
+    public string Nome { get; set; } 
 
     [Column("CPF")]
     [StringLength(14)]
-    [Unicode(false)]
-    public string Cpf { get; set; } = null!;
+    public string Cpf { get; set; } 
 
     [Column("EMAIL")]
     [StringLength(100)]
-    [Unicode(false)]
-    public string Email { get; set; } = null!;
+    [EmailAddress]
+    public string Email { get; set; } 
 
     [Column("SENHA")]
     [StringLength(100)]
-    [Unicode(false)]
-    public string Senha { get; set; } = null!;
-
-    [InverseProperty("IdPessoaFisicaNavigation")]
-    public virtual ICollection<TbUsuarios> Usuarios { get; set; } = new List<TbUsuarios>();
+    public string Senha { get; set; } 
 }

@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
 
 namespace TPC_EcoSupport.Models;
 
@@ -19,15 +18,13 @@ public partial class TbServicos
 
     [Column("DESCRICAO")]
     [StringLength(200)]
-    [Unicode(false)]
     public string? Descricao { get; set; }
 
     [Column("STATUS")]
     [StringLength(50)]
-    [Unicode(false)]
-    public string? Status { get; set; }
+    public string? Status { get; set; } // 'Pendente', 'Em Progresso', 'Finalizado', 'Concluído', 'Cancelado'
 
     [ForeignKey("IdEmpresa")]
-    [InverseProperty("TbServicos")]
-    public virtual TbEmpresas? IdEmpresaNavigation { get; set; }
+    [InverseProperty("Servicos")]
+    public virtual TbEmpresas Empresa { get; set; }
 }

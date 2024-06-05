@@ -2,9 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using TPC_EcoSupport.Data;
 using TPC_EcoSupport.Models;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace TPC_EcoSupport.Controllers
 {
@@ -17,94 +14,131 @@ namespace TPC_EcoSupport.Controllers
             _context = context;
         }
 
-        public IActionResult Usuarios()
+        // GET: TbUsuarios
+        public async Task<IActionResult> Usuarios()
         {
-            return View();
+            return View(await _context.Usuarios.ToListAsync());
         }
 
-        public IActionResult GetUsuarios()
-        {
-            var usuarios = _context.Usuarios.ToListAsync();
-            if (usuarios == null)
-            {
-                return BadRequest("Transações não encontradas!");
-            }
-            return (IActionResult)usuarios;
-        }
-
-        public IActionResult GetUsuariosById(decimal? id)
+        // GET: TbUsuarios/Details/5
+        public async Task<IActionResult> Details(decimal? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var usuarios = _context.Usuarios
+            var tbUsuarios = await _context.Usuarios
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (usuarios == null)
+            if (tbUsuarios == null)
             {
                 return NotFound();
             }
 
-            return (IActionResult)usuarios;
+            return View(tbUsuarios);
         }
 
+        // GET: TbUsuarios/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: TbUsuarios/Create
         [HttpPost]
-        public IActionResult CreateUsuario([FromBody] TbUsuarios request)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Id,Nome,Email,Senha,Tipo,IdEmpresa,IdInstituicao,IdPessoaFisica")] TbUsuarios tbUsuarios)
         {
-            TbUsuarios newUsuario = new TbUsuarios
+            if (ModelState.IsValid)
             {
-                Nome = request.Nome,
-                Email = request.Email,
-                Senha = request.Senha,
-                Tipo = request.Tipo,
-                IdEmpresa = request.IdEmpresa,
-                IdInstituicao = request.IdInstituicao,
-                IdPessoaFisica = request.IdPessoaFisica
-            };
-            _context.Usuarios.Add(newUsuario);
-            _context.SaveChanges();
-            return RedirectToAction("Index", "Home");
+                _context.Add(tbUsuarios);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(tbUsuarios);
         }
 
-        [HttpPut("{id}")]
-        public IActionResult UpdateUsuario(decimal id, [FromBody] TbUsuarios request)
+        // GET: TbUsuarios/Edit/5
+        public async Task<IActionResult> Edit(decimal? id)
         {
-            var usuario = _context.Usuarios.Find(id);
-
-            if (usuario == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            usuario.Nome = request.Nome;
-            usuario.Email = request.Email;
-            usuario.Senha = request.Senha;
-            usuario.Tipo = request.Tipo;
-            usuario.IdEmpresa = request.IdEmpresa;
-            usuario.IdInstituicao = request.IdInstituicao;
-            usuario.IdPessoaFisica = request.IdPessoaFisica;
-
-            _context.Usuarios.Update(usuario);
-            _context.SaveChanges();
-
-            return RedirectToAction("Index", "Home");
+            var tbUsuarios = await _context.Usuarios.FindAsync(id);
+            if (tbUsuarios == null)
+            {
+                return NotFound();
+            }
+            return View(tbUsuarios);
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult DeleteUsuario(decimal id)
+        // POST: TbUsuarios/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(decimal id, [Bind("Id,Nome,Email,Senha,Tipo,IdEmpresa,IdInstituicao,IdPessoaFisica")] TbUsuarios tbUsuarios)
         {
-            var usuario = _context.Usuarios.Find(id);
-
-            if (usuario == null)
+            if (id != tbUsuarios.Id)
             {
                 return NotFound();
             }
 
-            _context.Usuarios.Remove(usuario);
-            _context.SaveChanges();
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(tbUsuarios);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!TbUsuariosExists(tbUsuarios.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(tbUsuarios);
+        }
 
-            return RedirectToAction("Index", "Home");
+        // GET: TbUsuarios/Delete/5
+        public async Task<IActionResult> Delete(decimal? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var tbUsuarios = await _context.Usuarios
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (tbUsuarios == null)
+            {
+                return NotFound();
+            }
+
+            return View(tbUsuarios);
+        }
+
+        // POST: TbUsuarios/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(decimal id)
+        {
+            var tbUsuarios = await _context.Usuarios.FindAsync(id);
+            _context.Usuarios.Remove(tbUsuarios);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        private bool TbUsuariosExists(decimal id)
+        {
+            return _context.Usuarios.Any(e => e.Id == id);
         }
     }
 }

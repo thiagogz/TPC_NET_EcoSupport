@@ -36,12 +36,13 @@ public partial class TbEmpresas
     [Unicode(false)]
     public string? Endereco { get; set; }
 
-    [InverseProperty("IdEmpresaNavigation")]
-    public virtual ICollection<TbContratos> Contratos { get; set; } = new List<TbContratos>();
+    // Propriedade de navegação corrigida para apontar para a classe TbUsuarios
+    [InverseProperty("Empresa")]
+    public virtual ICollection<TbUsuarios> Usuarios { get; set; }
 
-    [InverseProperty("IdEmpresaNavigation")]
-    public virtual ICollection<TbServicos> Servicos { get; set; } = new List<TbServicos>();
+    [InverseProperty("Empresa")]
+    public virtual ICollection<TbContratos> Contratos { get; set; }
 
-    [InverseProperty("IdEmpresaNavigation")]
-    public virtual ICollection<TbUsuarios> Usuarios { get; set; } = new List<TbUsuarios>();
+    [InverseProperty("Empresa")]
+    public virtual ICollection<TbServicos> Servicos { get; set; }
 }

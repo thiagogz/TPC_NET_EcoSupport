@@ -14,90 +14,131 @@ namespace TPC_EcoSupport.Controllers
             _context = context;
         }
 
-        public IActionResult Empresas()
+        // GET: TbEmpresas
+        public async Task<IActionResult> Empresas()
         {
-            return View();
+            return View(await _context.Empresas.ToListAsync());
         }
 
-        public IActionResult GetEmpresas()
-        {
-            var empresas = _context.Empresas.ToListAsync();
-            if (empresas == null)
-            {
-                return BadRequest("Empresas não encontradas!");
-            }
-            return (IActionResult)empresas;
-        }
-
-        public IActionResult GetEmpresaById(decimal? id)
+        // GET: TbEmpresas/Details/5
+        public async Task<IActionResult> Details(decimal? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var empresa = _context.Empresas
+            var tbEmpresas = await _context.Empresas
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (empresa == null)
+            if (tbEmpresas == null)
             {
                 return NotFound();
             }
 
-            return (IActionResult)empresa;
+            return View(tbEmpresas);
         }
 
+        // GET: TbEmpresas/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: TbEmpresas/Create
         [HttpPost]
-        public IActionResult CreateEmpresa([FromBody] TbEmpresas request)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Id,Nome,Cnpj,Email,Telefone,Endereco")] TbEmpresas tbEmpresas)
         {
-            TbEmpresas newEmpresa = new TbEmpresas
+            if (ModelState.IsValid)
             {
-                Nome = request.Nome,
-                Cnpj = request.Cnpj,
-                Email = request.Email,
-                Telefone = request.Telefone,
-                Endereco = request.Endereco
-            };
-            _context.Empresas.Add(newEmpresa);
-            _context.SaveChanges();
-            return RedirectToAction("Index", "Home");
+                _context.Add(tbEmpresas);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(tbEmpresas);
         }
 
-        [HttpPut("{id}")]
-        public IActionResult UpdateEmpresa(decimal id, [FromBody] TbEmpresas request)
+        // GET: TbEmpresas/Edit/5
+        public async Task<IActionResult> Edit(decimal? id)
         {
-            var empresa = _context.Empresas.Find(id);
-
-            if (empresa == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            empresa.Nome = request.Nome != null ? request.Nome : empresa.Nome;
-            empresa.Cnpj = request.Cnpj != null ? request.Cnpj : empresa.Cnpj;
-            empresa.Email = request.Email != null ? request.Email : empresa.Email;
-            empresa.Telefone = request.Telefone != null ? request.Telefone : empresa.Telefone;
-            empresa.Endereco = request.Endereco != null ? request.Endereco : empresa.Endereco;
-
-            _context.Empresas.Update(empresa);
-            _context.SaveChanges();
-
-            return RedirectToAction("Index", "Home");
+            var tbEmpresas = await _context.Empresas.FindAsync(id);
+            if (tbEmpresas == null)
+            {
+                return NotFound();
+            }
+            return View(tbEmpresas);
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult DeleteEmpresa(decimal id)
+        // POST: TbEmpresas/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(decimal id, [Bind("Id,Nome,Cnpj,Email,Telefone,Endereco")] TbEmpresas tbEmpresas)
         {
-            var empresa = _context.Empresas.Find(id);
-
-            if (empresa == null)
+            if (id != tbEmpresas.Id)
             {
                 return NotFound();
             }
 
-            _context.Empresas.Remove(empresa);
-            _context.SaveChanges();
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(tbEmpresas);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!TbEmpresasExists(tbEmpresas.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(tbEmpresas);
+        }
 
-            return RedirectToAction("Index", "Home");
+        // GET: TbEmpresas/Delete/5
+        public async Task<IActionResult> Delete(decimal? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var tbEmpresas = await _context.Empresas
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (tbEmpresas == null)
+            {
+                return NotFound();
+            }
+
+            return View(tbEmpresas);
+        }
+
+        // POST: TbEmpresas/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(decimal id)
+        {
+            var tbEmpresas = await _context.Empresas.FindAsync(id);
+            _context.Empresas.Remove(tbEmpresas);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        private bool TbEmpresasExists(decimal id)
+        {
+            return _context.Empresas.Any(e => e.Id == id);
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
 
 namespace TPC_EcoSupport.Models;
 
@@ -16,32 +15,28 @@ public partial class TbContratos
 
     [Column("TIPO_CONTRATO")]
     [StringLength(50)]
-    [Unicode(false)]
     public string TipoContrato { get; set; } = null!;
 
     [Column("DATA_INICIO", TypeName = "DATE")]
-    public DateTime? DataInicio { get; set; }
+    public DateTime DataInicio { get; set; }
 
     [Column("DATA_FIM", TypeName = "DATE")]
-    public DateTime? DataFim { get; set; }
+    public DateTime DataFim { get; set; }
 
     [Column("VALOR", TypeName = "NUMBER")]
-    public decimal? Valor { get; set; }
+    public decimal Valor { get; set; }
 
     [Column("STATUS")]
     [StringLength(50)]
-    [Unicode(false)]
     public string? Status { get; set; }
 
     [Column("ASSINATURA_PENDENTE")]
     [StringLength(1)]
-    [Unicode(false)]
-    public string? AssinaturaPendente { get; set; }
+    public string? AssinaturaPendente { get; set; }// 'S' ou 'N'
 
     [ForeignKey("IdEmpresa")]
-    [InverseProperty("TbContratos")]
-    public virtual TbEmpresas? IdEmpresaNavigation { get; set; }
+    public virtual TbEmpresas Empresa { get; set; }
 
-    [InverseProperty("IdContratoNavigation")]
-    public virtual ICollection<TbTransacoes> Transacoes { get; set; } = new List<TbTransacoes>();
+    [InverseProperty("Contrato")]
+    public virtual ICollection<TbTransacoes> Transacoes { get; set; }
 }

@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
 
 namespace TPC_EcoSupport.Models;
 
@@ -22,13 +21,9 @@ public partial class TbTransacoes
 
     [Column("DESCRICAO")]
     [StringLength(200)]
-    [Unicode(false)]
-    public string? Descricao { get; set; }
+    public string Descricao { get; set; }
 
     [ForeignKey("IdContrato")]
-    [InverseProperty("TbTransacos")]
-    public virtual TbContratos? IdContratoNavigation { get; set; }
-
-    [InverseProperty("IdTransacaoNavigation")]
-    public virtual ICollection<TbExibicoes> Exibicoes { get; set; } = new List<TbExibicoes>();
+    [InverseProperty("Transacoes")]
+    public virtual TbContratos Contrato { get; set; }
 }

@@ -14,88 +14,131 @@ namespace TPC_EcoSupport.Controllers
             _context = context;
         }
 
-        public IActionResult Servicos()
+        // GET: TbServicos
+        public async Task<IActionResult> Servicos()
         {
-            return View();
+            return View(await _context.Servicos.ToListAsync());
         }
 
-        public IActionResult GetServicos()
-        {
-            var servicos = _context.Servicos.ToListAsync();
-            if (servicos == null)
-            {
-                return BadRequest("Serviços não encontrados!");
-            }
-            return (IActionResult)servicos;
-        }
-
-        public IActionResult GetServicoById(decimal? id)
+        // GET: TbServicos/Details/5
+        public async Task<IActionResult> Details(decimal? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var servico = _context.Servicos
+            var tbServicos = await _context.Servicos
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (servico == null)
+            if (tbServicos == null)
             {
                 return NotFound();
             }
 
-            return (IActionResult)servico;
+            return View(tbServicos);
         }
 
+        // GET: TbServicos/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: TbServicos/Create
         [HttpPost]
-        public IActionResult CreateServico([FromBody] TbServicos request)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Id,IdEmpresa,DataServico,Descricao,Status")] TbServicos tbServicos)
         {
-            TbServicos newServico = new TbServicos
+            if (ModelState.IsValid)
             {
-                IdEmpresa = request.IdEmpresa,
-                DataServico = request.DataServico,
-                Descricao = request.Descricao,
-                Status = request.Status
-            };
-            _context.Servicos.Add(newServico);
-            _context.SaveChanges();
-            return RedirectToAction("Index", "Home");
+                _context.Add(tbServicos);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(tbServicos);
         }
 
-        [HttpPut("{id}")]
-        public IActionResult UpdateServico(decimal id, [FromBody] TbServicos request)
+        // GET: TbServicos/Edit/5
+        public async Task<IActionResult> Edit(decimal? id)
         {
-            var servico = _context.Servicos.Find(id);
-
-            if (servico == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            servico.IdEmpresa = request.IdEmpresa != null ? request.IdEmpresa : servico.IdEmpresa;
-            servico.DataServico = request.DataServico;
-            servico.Descricao = request.Descricao != null ? request.Descricao : servico.Descricao;
-            servico.Status = request.Status != null ? request.Status : servico.Status;
-
-            _context.Servicos.Update(servico);
-            _context.SaveChanges();
-
-            return RedirectToAction("Index", "Home");
+            var tbServicos = await _context.Servicos.FindAsync(id);
+            if (tbServicos == null)
+            {
+                return NotFound();
+            }
+            return View(tbServicos);
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult DeleteServico(decimal id)
+        // POST: TbServicos/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(decimal id, [Bind("Id,IdEmpresa,DataServico,Descricao,Status")] TbServicos tbServicos)
         {
-            var servico = _context.Servicos.Find(id);
-
-            if (servico == null)
+            if (id != tbServicos.Id)
             {
                 return NotFound();
             }
 
-            _context.Servicos.Remove(servico);
-            _context.SaveChanges();
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(tbServicos);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!TbServicosExists(tbServicos.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(tbServicos);
+        }
 
-            return RedirectToAction("Index", "Home");
+        // GET: TbServicos/Delete/5
+        public async Task<IActionResult> Delete(decimal? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var tbServicos = await _context.Servicos
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (tbServicos == null)
+            {
+                return NotFound();
+            }
+
+            return View(tbServicos);
+        }
+
+        // POST: TbServicos/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(decimal id)
+        {
+            var tbServicos = await _context.Servicos.FindAsync(id);
+            _context.Servicos.Remove(tbServicos);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        private bool TbServicosExists(decimal id)
+        {
+            return _context.Servicos.Any(e => e.Id == id);
         }
     }
 }

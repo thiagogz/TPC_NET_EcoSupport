@@ -14,22 +14,18 @@ public partial class TbUsuarios
 
     [Column("NOME")]
     [StringLength(100)]
-    [Unicode(false)]
     public string Nome { get; set; } = null!;
 
     [Column("EMAIL")]
     [StringLength(100)]
-    [Unicode(false)]
     public string Email { get; set; } = null!;
 
     [Column("SENHA")]
     [StringLength(100)]
-    [Unicode(false)]
     public string Senha { get; set; } = null!;
 
     [Column("TIPO")]
     [StringLength(20)]
-    [Unicode(false)]
     public string Tipo { get; set; } = null!;
 
     [Column("ID_EMPRESA", TypeName = "NUMBER")]
@@ -42,17 +38,11 @@ public partial class TbUsuarios
     public decimal? IdPessoaFisica { get; set; }
 
     [ForeignKey("IdEmpresa")]
-    [InverseProperty("TbUsuarios")]
-    public virtual TbEmpresas? IdEmpresaNavigation { get; set; }
+    public virtual TbEmpresas? Empresa { get; set; }
 
     [ForeignKey("IdInstituicao")]
-    [InverseProperty("TbUsuarios")]
-    public virtual TbInstituicoes? IdInstituicaoNavigation { get; set; }
+    public virtual TbInstituicoes? Instituicao { get; set; }
 
     [ForeignKey("IdPessoaFisica")]
-    [InverseProperty("TbUsuarios")]
-    public virtual TbPessoasFisicas? IdPessoaFisicaNavigation { get; set; }
-
-    [InverseProperty("IdUsuarioNavigation")]
-    public virtual ICollection<TbTermosCondicoes> TermosCondicoes { get; set; } = new List<TbTermosCondicoes>();
+    public virtual TbPessoasFisicas? PessoaFisica { get; set; }
 }

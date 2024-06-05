@@ -14,88 +14,131 @@ namespace TPC_EcoSupport.Controllers
             _context = context;
         }
 
-        public IActionResult PessoasFisicas()
+        // GET: TbPessoasFisicas
+        public async Task<IActionResult> PessoasFisicas()
         {
-            return View();
+            return View(await _context.PessoasFisicas.ToListAsync());
         }
 
-        public IActionResult GetPessoasFisicas()
-        {
-            var pessoasFisicas = _context.PessoasFisicas.ToListAsync();
-            if (pessoasFisicas == null)
-            {
-                return BadRequest("Pessoas físicas não encontradas!");
-            }
-            return (IActionResult)pessoasFisicas;
-        }
-
-        public IActionResult GetPessoaFisicaById(decimal? id)
+        // GET: TbPessoasFisicas/Details/5
+        public async Task<IActionResult> Details(decimal? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var pessoaFisica = _context.PessoasFisicas
+            var tbPessoasFisicas = await _context.PessoasFisicas
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (pessoaFisica == null)
+            if (tbPessoasFisicas == null)
             {
                 return NotFound();
             }
 
-            return (IActionResult)pessoaFisica;
+            return View(tbPessoasFisicas);
         }
 
+        // GET: TbPessoasFisicas/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: TbPessoasFisicas/Create
         [HttpPost]
-        public IActionResult CreatePessoaFisica([FromBody] TbPessoasFisicas request)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Id,Nome,Cpf,Email,Senha")] TbPessoasFisicas tbPessoasFisicas)
         {
-            TbPessoasFisicas newPessoaFisica = new TbPessoasFisicas
+            if (ModelState.IsValid)
             {
-                Nome = request.Nome,
-                Cpf = request.Cpf,
-                Email = request.Email,
-                Senha = request.Senha
-            };
-            _context.PessoasFisicas.Add(newPessoaFisica);
-            _context.SaveChanges();
-            return RedirectToAction("Index", "Home");
+                _context.Add(tbPessoasFisicas);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(tbPessoasFisicas);
         }
 
-        [HttpPut("{id}")]
-        public IActionResult UpdatePessoaFisica(decimal id, [FromBody] TbPessoasFisicas request)
+        // GET: TbPessoasFisicas/Edit/5
+        public async Task<IActionResult> Edit(decimal? id)
         {
-            var pessoaFisica = _context.PessoasFisicas.Find(id);
-
-            if (pessoaFisica == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            pessoaFisica.Nome = request.Nome != null ? request.Nome : pessoaFisica.Nome;
-            pessoaFisica.Cpf = request.Cpf != null ? request.Cpf : pessoaFisica.Cpf;
-            pessoaFisica.Email = request.Email != null ? request.Email : pessoaFisica.Email;
-            pessoaFisica.Senha = request.Senha != null ? request.Senha : pessoaFisica.Senha;
-
-            _context.PessoasFisicas.Update(pessoaFisica);
-            _context.SaveChanges();
-
-            return RedirectToAction("Index", "Home");
+            var tbPessoasFisicas = await _context.PessoasFisicas.FindAsync(id);
+            if (tbPessoasFisicas == null)
+            {
+                return NotFound();
+            }
+            return View(tbPessoasFisicas);
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult DeletePessoaFisica(decimal id)
+        // POST: TbPessoasFisicas/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(decimal id, [Bind("Id,Nome,Cpf,Email,Senha")] TbPessoasFisicas tbPessoasFisicas)
         {
-            var pessoaFisica = _context.PessoasFisicas.Find(id);
-
-            if (pessoaFisica == null)
+            if (id != tbPessoasFisicas.Id)
             {
                 return NotFound();
             }
 
-            _context.PessoasFisicas.Remove(pessoaFisica);
-            _context.SaveChanges();
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(tbPessoasFisicas);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!TbPessoasFisicasExists(tbPessoasFisicas.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(tbPessoasFisicas);
+        }
 
-            return RedirectToAction("Index", "Home");
+        // GET: TbPessoasFisicas/Delete/5
+        public async Task<IActionResult> Delete(decimal? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var tbPessoasFisicas = await _context.PessoasFisicas
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (tbPessoasFisicas == null)
+            {
+                return NotFound();
+            }
+
+            return View(tbPessoasFisicas);
+        }
+
+        // POST: TbPessoasFisicas/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(decimal id)
+        {
+            var tbPessoasFisicas = await _context.PessoasFisicas.FindAsync(id);
+            _context.PessoasFisicas.Remove(tbPessoasFisicas);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        private bool TbPessoasFisicasExists(decimal id)
+        {
+            return _context.PessoasFisicas.Any(e => e.Id == id);
         }
     }
 }

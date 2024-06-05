@@ -14,90 +14,131 @@ namespace TPC_EcoSupport.Controllers
             _context = context;
         }
 
-        public IActionResult Instituicoes()
+        // GET: TbInstituicoes
+        public async Task<IActionResult> Instituicoes()
         {
-            return View();
+            return View(await _context.Instituicoes.ToListAsync());
         }
 
-        public IActionResult GetInstituicoes()
-        {
-            var instituicoes = _context.Instituicoes.ToListAsync();
-            if (instituicoes == null)
-            {
-                return BadRequest("Instituições não encontradas!");
-            }
-            return (IActionResult)instituicoes;
-        }
-
-        public IActionResult GetInstituicaoById(decimal? id)
+        // GET: TbInstituicoes/Details/5
+        public async Task<IActionResult> Details(decimal? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var instituicao = _context.Instituicoes
+            var tbInstituicoes = await _context.Instituicoes
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (instituicao == null)
+            if (tbInstituicoes == null)
             {
                 return NotFound();
             }
 
-            return (IActionResult)instituicao;
+            return View(tbInstituicoes);
         }
 
+        // GET: TbInstituicoes/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: TbInstituicoes/Create
         [HttpPost]
-        public IActionResult CreateInstituicao([FromBody] TbInstituicoes request)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Id,Nome,Cnpj,Email,Telefone,Endereco")] TbInstituicoes tbInstituicoes)
         {
-            TbInstituicoes newInstituicao = new TbInstituicoes
+            if (ModelState.IsValid)
             {
-                Nome = request.Nome,
-                Cnpj = request.Cnpj,
-                Email = request.Email,
-                Telefone = request.Telefone,
-                Endereco = request.Endereco
-            };
-            _context.Instituicoes.Add(newInstituicao);
-            _context.SaveChanges();
-            return RedirectToAction("Index", "Home");
+                _context.Add(tbInstituicoes);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(tbInstituicoes);
         }
 
-        [HttpPut("{id}")]
-        public IActionResult UpdateInstituicao(decimal id, [FromBody] TbInstituicoes request)
+        // GET: TbInstituicoes/Edit/5
+        public async Task<IActionResult> Edit(decimal? id)
         {
-            var instituicao = _context.Instituicoes.Find(id);
-
-            if (instituicao == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            instituicao.Nome = request.Nome != null ? request.Nome : instituicao.Nome;
-            instituicao.Cnpj = request.Cnpj != null ? request.Cnpj : instituicao.Cnpj;
-            instituicao.Email = request.Email != null ? request.Email : instituicao.Email;
-            instituicao.Telefone = request.Telefone != null ? request.Telefone : instituicao.Telefone;
-            instituicao.Endereco = request.Endereco != null ? request.Endereco : instituicao.Endereco;
-
-            _context.Instituicoes.Update(instituicao);
-            _context.SaveChanges();
-
-            return RedirectToAction("Index", "Home");
+            var tbInstituicoes = await _context.Instituicoes.FindAsync(id);
+            if (tbInstituicoes == null)
+            {
+                return NotFound();
+            }
+            return View(tbInstituicoes);
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult DeleteInstituicao(decimal id)
+        // POST: TbInstituicoes/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(decimal id, [Bind("Id,Nome,Cnpj,Email,Telefone,Endereco")] TbInstituicoes tbInstituicoes)
         {
-            var instituicao = _context.Instituicoes.Find(id);
-
-            if (instituicao == null)
+            if (id != tbInstituicoes.Id)
             {
                 return NotFound();
             }
 
-            _context.Instituicoes.Remove(instituicao);
-            _context.SaveChanges();
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(tbInstituicoes);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!TbInstituicoesExists(tbInstituicoes.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(tbInstituicoes);
+        }
 
-            return RedirectToAction("Index", "Home");
+        // GET: TbInstituicoes/Delete/5
+        public async Task<IActionResult> Delete(decimal? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var tbInstituicoes = await _context.Instituicoes
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (tbInstituicoes == null)
+            {
+                return NotFound();
+            }
+
+            return View(tbInstituicoes);
+        }
+
+        // POST: TbInstituicoes/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(decimal id)
+        {
+            var tbInstituicoes = await _context.Instituicoes.FindAsync(id);
+            _context.Instituicoes.Remove(tbInstituicoes);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        private bool TbInstituicoesExists(decimal id)
+        {
+            return _context.Instituicoes.Any(e => e.Id == id);
         }
     }
 }

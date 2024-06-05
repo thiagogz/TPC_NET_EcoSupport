@@ -3,24 +3,8 @@
   "WorkspaceRootPath": "C:\\Users\\Thiago\\source\\repos\\TPC_EcoSupport\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{FC94CBED-2432-47CB-898D-1F70F16A8FA8}|TPC_EcoSupport.csproj|c:\\users\\thiago\\source\\repos\\tpc_ecosupport\\controllers\\tbusuarioscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FC94CBED-2432-47CB-898D-1F70F16A8FA8}|TPC_EcoSupport.csproj|solutionrelative:controllers\\tbusuarioscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{FC94CBED-2432-47CB-898D-1F70F16A8FA8}|TPC_EcoSupport.csproj|c:\\users\\thiago\\source\\repos\\tpc_ecosupport\\controllers\\tbtransacoescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FC94CBED-2432-47CB-898D-1F70F16A8FA8}|TPC_EcoSupport.csproj|solutionrelative:controllers\\tbtransacoescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{FC94CBED-2432-47CB-898D-1F70F16A8FA8}|TPC_EcoSupport.csproj|c:\\users\\thiago\\source\\repos\\tpc_ecosupport\\models\\tbtransacoes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FC94CBED-2432-47CB-898D-1F70F16A8FA8}|TPC_EcoSupport.csproj|solutionrelative:models\\tbtransacoes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{FC94CBED-2432-47CB-898D-1F70F16A8FA8}|TPC_EcoSupport.csproj|c:\\users\\thiago\\source\\repos\\tpc_ecosupport\\controllers\\tbexibicoescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FC94CBED-2432-47CB-898D-1F70F16A8FA8}|TPC_EcoSupport.csproj|solutionrelative:controllers\\tbexibicoescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{FC94CBED-2432-47CB-898D-1F70F16A8FA8}|TPC_EcoSupport.csproj|c:\\users\\thiago\\source\\repos\\tpc_ecosupport\\data\\datacontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FC94CBED-2432-47CB-898D-1F70F16A8FA8}|TPC_EcoSupport.csproj|solutionrelative:data\\datacontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{FC94CBED-2432-47CB-898D-1F70F16A8FA8}|TPC_EcoSupport.csproj|c:\\users\\thiago\\source\\repos\\tpc_ecosupport\\views\\tbusuarios\\usuarios.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{FC94CBED-2432-47CB-898D-1F70F16A8FA8}|TPC_EcoSupport.csproj|solutionrelative:views\\tbusuarios\\usuarios.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -47,66 +31,14 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "TbUsuariosController.cs",
-              "DocumentMoniker": "C:\\Users\\Thiago\\source\\repos\\TPC_EcoSupport\\Controllers\\TbUsuariosController.cs",
-              "RelativeDocumentMoniker": "Controllers\\TbUsuariosController.cs",
-              "ToolTip": "C:\\Users\\Thiago\\source\\repos\\TPC_EcoSupport\\Controllers\\TbUsuariosController.cs",
-              "RelativeToolTip": "Controllers\\TbUsuariosController.cs",
-              "ViewState": "AQIAACwAAAAAAAAAAAAkwF4AAAAqAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-04T22:44:23.264Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "TbTransacoesController.cs",
-              "DocumentMoniker": "C:\\Users\\Thiago\\source\\repos\\TPC_EcoSupport\\Controllers\\TbTransacoesController.cs",
-              "RelativeDocumentMoniker": "Controllers\\TbTransacoesController.cs",
-              "ToolTip": "C:\\Users\\Thiago\\source\\repos\\TPC_EcoSupport\\Controllers\\TbTransacoesController.cs",
-              "RelativeToolTip": "Controllers\\TbTransacoesController.cs",
-              "ViewState": "AQIAABcAAAAAAAAAAAAwwB8AAAAIAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-04T22:33:47.629Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "TbTransacoes.cs",
-              "DocumentMoniker": "C:\\Users\\Thiago\\source\\repos\\TPC_EcoSupport\\Models\\TbTransacoes.cs",
-              "RelativeDocumentMoniker": "Models\\TbTransacoes.cs",
-              "ToolTip": "C:\\Users\\Thiago\\source\\repos\\TPC_EcoSupport\\Models\\TbTransacoes.cs",
-              "RelativeToolTip": "Models\\TbTransacoes.cs",
-              "ViewState": "AQIAAAsAAAAAAAAAAAAAABEAAAAmAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-04T22:33:21.141Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "TbExibicoesController.cs",
-              "DocumentMoniker": "C:\\Users\\Thiago\\source\\repos\\TPC_EcoSupport\\Controllers\\TbExibicoesController.cs",
-              "RelativeDocumentMoniker": "Controllers\\TbExibicoesController.cs",
-              "ToolTip": "C:\\Users\\Thiago\\source\\repos\\TPC_EcoSupport\\Controllers\\TbExibicoesController.cs",
-              "RelativeToolTip": "Controllers\\TbExibicoesController.cs",
-              "ViewState": "AQIAAD4AAAAAAAAAAAAqwGQAAAABAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-04T22:22:41.629Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "DataContext.cs",
-              "DocumentMoniker": "C:\\Users\\Thiago\\source\\repos\\TPC_EcoSupport\\Data\\DataContext.cs",
-              "RelativeDocumentMoniker": "Data\\DataContext.cs",
-              "ToolTip": "C:\\Users\\Thiago\\source\\repos\\TPC_EcoSupport\\Data\\DataContext.cs",
-              "RelativeToolTip": "Data\\DataContext.cs",
-              "ViewState": "AQIAAG4AAAAAAAAAAAAkwHwAAABKAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-04T21:35:12.609Z",
+              "Title": "Usuarios.cshtml",
+              "DocumentMoniker": "C:\\Users\\Thiago\\source\\repos\\TPC_EcoSupport\\Views\\TbUsuarios\\Usuarios.cshtml",
+              "RelativeDocumentMoniker": "Views\\TbUsuarios\\Usuarios.cshtml",
+              "ToolTip": "C:\\Users\\Thiago\\source\\repos\\TPC_EcoSupport\\Views\\TbUsuarios\\Usuarios.cshtml",
+              "RelativeToolTip": "Views\\TbUsuarios\\Usuarios.cshtml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAACcAAAANAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-06-05T15:18:24.183Z",
               "EditorCaption": ""
             }
           ]

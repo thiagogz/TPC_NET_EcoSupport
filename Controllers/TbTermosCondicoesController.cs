@@ -14,86 +14,131 @@ namespace TPC_EcoSupport.Controllers
             _context = context;
         }
 
-        public IActionResult TermosCondicoes()
+        // GET: TbTermosCondicoes
+        public async Task<IActionResult> TermosCondicoes()
         {
-            return View();
+            return View(await _context.TermosCondicoes.ToListAsync());
         }
 
-        public IActionResult GetTermosCondicoes()
-        {
-            var termosCondicoes = _context.TermosCondicoes.ToListAsync();
-            if (termosCondicoes == null)
-            {
-                return BadRequest("Termos e Condições não encontrados!");
-            }
-            return (IActionResult)termosCondicoes;
-        }
-
-        public IActionResult GetTermoCondicaoById(decimal? id)
+        // GET: TbTermosCondicoes/Details/5
+        public async Task<IActionResult> Details(decimal? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var termoCondicao = _context.TermosCondicoes
+            var tbTermosCondicoes = await _context.TermosCondicoes
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (termoCondicao == null)
+            if (tbTermosCondicoes == null)
             {
                 return NotFound();
             }
 
-            return (IActionResult)termoCondicao;
+            return View(tbTermosCondicoes);
         }
 
+        // GET: TbTermosCondicoes/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: TbTermosCondicoes/Create
         [HttpPost]
-        public IActionResult CreateTermoCondicao([FromBody] TbTermosCondicoes request)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Id,IdUsuario,Aceitou,DataAceite")] TbTermosCondicoes tbTermosCondicoes)
         {
-            TbTermosCondicoes newTermoCondicao = new TbTermosCondicoes
+            if (ModelState.IsValid)
             {
-                IdUsuario = request.IdUsuario,
-                Aceitou = request.Aceitou,
-                DataAceite = request.DataAceite
-            };
-            _context.TermosCondicoes.Add(newTermoCondicao);
-            _context.SaveChanges();
-            return RedirectToAction("Index", "Home");
+                _context.Add(tbTermosCondicoes);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(tbTermosCondicoes);
         }
 
-        [HttpPut("{id}")]
-        public IActionResult UpdateTermoCondicao(decimal id, [FromBody] TbTermosCondicoes request)
+        // GET: TbTermosCondicoes/Edit/5
+        public async Task<IActionResult> Edit(decimal? id)
         {
-            var termoCondicao = _context.TermosCondicoes.Find(id);
-
-            if (termoCondicao == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            termoCondicao.IdUsuario = request.IdUsuario != null ? request.IdUsuario : termoCondicao.IdUsuario;
-            termoCondicao.Aceitou = request.Aceitou != null ? request.Aceitou : termoCondicao.Aceitou;
-            termoCondicao.DataAceite = request.DataAceite != null ? request.DataAceite : termoCondicao.DataAceite;
-
-            _context.TermosCondicoes.Update(termoCondicao);
-            _context.SaveChanges();
-
-            return RedirectToAction("Index", "Home");
+            var tbTermosCondicoes = await _context.TermosCondicoes.FindAsync(id);
+            if (tbTermosCondicoes == null)
+            {
+                return NotFound();
+            }
+            return View(tbTermosCondicoes);
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult DeleteTermoCondicao(decimal id)
+        // POST: TbTermosCondicoes/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(decimal id, [Bind("Id,IdUsuario,Aceitou,DataAceite")] TbTermosCondicoes tbTermosCondicoes)
         {
-            var termoCondicao = _context.TermosCondicoes.Find(id);
-
-            if (termoCondicao == null)
+            if (id != tbTermosCondicoes.Id)
             {
                 return NotFound();
             }
 
-            _context.TermosCondicoes.Remove(termoCondicao);
-            _context.SaveChanges();
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(tbTermosCondicoes);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!TbTermosCondicoesExists(tbTermosCondicoes.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(tbTermosCondicoes);
+        }
 
-            return RedirectToAction("Index", "Home");
+        // GET: TbTermosCondicoes/Delete/5
+        public async Task<IActionResult> Delete(decimal? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var tbTermosCondicoes = await _context.TermosCondicoes
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (tbTermosCondicoes == null)
+            {
+                return NotFound();
+            }
+
+            return View(tbTermosCondicoes);
+        }
+
+        // POST: TbTermosCondicoes/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(decimal id)
+        {
+            var tbTermosCondicoes = await _context.TermosCondicoes.FindAsync(id);
+            _context.TermosCondicoes.Remove(tbTermosCondicoes);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        private bool TbTermosCondicoesExists(decimal id)
+        {
+            return _context.TermosCondicoes.Any(e => e.Id == id);
         }
     }
 }

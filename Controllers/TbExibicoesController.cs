@@ -14,88 +14,131 @@ namespace TPC_EcoSupport.Controllers
             _context = context;
         }
 
-        public IActionResult Exibicoes()
+        // GET: TbExibicoes
+        public async Task<IActionResult> Exibicoes()
         {
-            return View();
+            return View(await _context.Exibicoes.ToListAsync());
         }
 
-        public IActionResult GetExibicoes()
-        {
-            var exibicoes = _context.Exibicoes.ToListAsync();
-            if (exibicoes == null)
-            {
-                return BadRequest("Exibicoes não encontradas!");
-            }
-            return (IActionResult)exibicoes;
-        }
-
-        public IActionResult GetExibicaoById(decimal? id)
+        // GET: TbExibicoes/Details/5
+        public async Task<IActionResult> Details(decimal? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var exibicao = _context.Exibicoes
+            var tbExibicoes = await _context.Exibicoes
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (exibicao == null)
+            if (tbExibicoes == null)
             {
                 return NotFound();
             }
 
-            return (IActionResult)exibicao;
+            return View(tbExibicoes);
         }
 
+        // GET: TbExibicoes/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: TbExibicoes/Create
         [HttpPost]
-        public IActionResult CreateExibicao([FromBody] TbExibicoes request)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Id,IdTransacao,Valor,DataExibicao,Descricao")] TbExibicoes tbExibicoes)
         {
-            TbExibicoes newExibicao = new TbExibicoes
+            if (ModelState.IsValid)
             {
-                IdTransacao = request.IdTransacao,
-                Valor = request.Valor,
-                DataExibicao = request.DataExibicao,
-                Descricao = request.Descricao
-            };
-            _context.Exibicoes.Add(newExibicao);
-            _context.SaveChanges();
-            return RedirectToAction("Index", "Home");
+                _context.Add(tbExibicoes);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(tbExibicoes);
         }
 
-        [HttpPut("{id}")]
-        public IActionResult UpdateExibicao(decimal id, [FromBody] TbExibicoes request)
+        // GET: TbExibicoes/Edit/5
+        public async Task<IActionResult> Edit(decimal? id)
         {
-            var exibicao = _context.Exibicoes.Find(id);
-
-            if (exibicao == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            exibicao.IdTransacao = request.IdTransacao != null ? request.IdTransacao : exibicao.IdTransacao;
-            exibicao.Valor = request.Valor;
-            exibicao.DataExibicao = request.DataExibicao;
-            exibicao.Descricao = request.Descricao != null ? request.Descricao : exibicao.Descricao;
-
-            _context.Exibicoes.Update(exibicao);
-            _context.SaveChanges();
-
-            return RedirectToAction("Index", "Home");
+            var tbExibicoes = await _context.Exibicoes.FindAsync(id);
+            if (tbExibicoes == null)
+            {
+                return NotFound();
+            }
+            return View(tbExibicoes);
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult DeleteExibicao(decimal id)
+        // POST: TbExibicoes/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(decimal id, [Bind("Id,IdTransacao,Valor,DataExibicao,Descricao")] TbExibicoes tbExibicoes)
         {
-            var exibicao = _context.Exibicoes.Find(id);
-
-            if (exibicao == null)
+            if (id != tbExibicoes.Id)
             {
                 return NotFound();
             }
 
-            _context.Exibicoes.Remove(exibicao);
-            _context.SaveChanges();
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(tbExibicoes);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!TbExibicoesExists(tbExibicoes.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(tbExibicoes);
+        }
 
-            return RedirectToAction("Index", "Home");
+        // GET: TbExibicoes/Delete/5
+        public async Task<IActionResult> Delete(decimal? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var tbExibicoes = await _context.Exibicoes
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (tbExibicoes == null)
+            {
+                return NotFound();
+            }
+
+            return View(tbExibicoes);
+        }
+
+        // POST: TbExibicoes/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(decimal id)
+        {
+            var tbExibicoes = await _context.Exibicoes.FindAsync(id);
+            _context.Exibicoes.Remove(tbExibicoes);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        private bool TbExibicoesExists(decimal id)
+        {
+            return _context.Exibicoes.Any(e => e.Id == id);
         }
     }
 }
