@@ -7,58 +7,121 @@ namespace TPC_EcoSupport.Data
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
-        public DbSet<Empresas> Empresas { get; set; }
-        public DbSet<Contratos> Contratos { get; set; }
-        public DbSet<Exibicoes> Exibicoes { get; set; }
-        public DbSet<Transacoes> Transacoes { get; set; }
-        public DbSet<Instituicoes> Instituicoes { get; set; }
-        public DbSet<Usuarios> Usuarios { get; set; }
-        public DbSet<Servicos> Servicos { get; set; }
-        public DbSet<Perfis_Empresa> Perfis_Empresa { get; set; }
-        public DbSet<Perfis_Instituicao> Perfis_Instituicao { get; set; }
+        public virtual DbSet<TbContratos> Contratos { get; set; }
+
+        public virtual DbSet<TbEmpresas> Empresas { get; set; }
+
+        public virtual DbSet<TbExibicoes> Exibicoes { get; set; }
+
+        public virtual DbSet<TbInstituicoes> Instituicoes { get; set; }
+
+        public virtual DbSet<TbPessoasFisicas> PessoasFisicas { get; set; }
+
+        public virtual DbSet<TbServicos> Servicos { get; set; }
+
+        public virtual DbSet<TbTermosCondicoes> TermosCondicoes { get; set; }
+
+        public virtual DbSet<TbTransacoes> Transacoes { get; set; }
+
+        public virtual DbSet<TbUsuarios> Usuarios { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Contratos>()
-                .HasOne(c => c.Empresa)
-                .WithMany(e => e.Contratos)
-                .HasForeignKey(c => c.IDEmpresa)
-                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder
+                .HasDefaultSchema("RM99085")
+                .UseCollation("USING_NLS_COMP");
 
-            modelBuilder.Entity<Exibicoes>()
-                .HasOne(e => e.Transacao)
-                .WithMany(t => t.Exibicoes)
-                .HasForeignKey(e => e.IDTransacao);
+            modelBuilder.Entity<TbContratos>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("SYS_C002408507");
 
-            modelBuilder.Entity<Transacoes>()
-                .HasOne(t => t.Contrato)
-                .WithMany(c => c.Transacoes)
-                .HasForeignKey(t => t.IDContrato);
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
-            modelBuilder.Entity<Servicos>()
-                .HasOne(s => s.Empresa)
-                .WithMany(e => e.Servicos)
-                .HasForeignKey(s => s.IDEmpresa);
+                entity.HasOne(d => d.IdEmpresaNavigation).WithMany(p => p.Contratos).HasConstraintName("SYS_C002408508");
+            });
 
-            modelBuilder.Entity<Perfis_Empresa>()
-                .HasOne(pe => pe.Usuario)
-                .WithMany()
-                .HasForeignKey(pe => pe.IDUsuario);
+            modelBuilder.Entity<TbEmpresas>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("SYS_C002408483");
 
-            modelBuilder.Entity<Perfis_Empresa>()
-                .HasOne(pe => pe.Empresa)
-                .WithMany()
-                .HasForeignKey(pe => pe.IDEmpresa);
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+            });
 
-            modelBuilder.Entity<Perfis_Instituicao>()
-                .HasOne(pi => pi.Usuario)
-                .WithMany()
-                .HasForeignKey(pi => pi.IDUsuario);
+            modelBuilder.Entity<TbExibicoes>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("SYS_C002408519");
 
-            modelBuilder.Entity<Perfis_Instituicao>()
-                .HasOne(pi => pi.Instituicao)
-                .WithMany()
-                .HasForeignKey(pi => pi.IDInstituicao);
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+
+                entity.HasOne(d => d.IdTransacaoNavigation).WithMany(p => p.Exibicoes).HasConstraintName("SYS_C002408520");
+            });
+
+            modelBuilder.Entity<TbInstituicoes>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("SYS_C002408486");
+
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+            });
+
+            modelBuilder.Entity<TbPessoasFisicas>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("SYS_C002408491");
+
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+            });
+
+            modelBuilder.Entity<TbServicos>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("SYS_C002408515");
+
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+
+                entity.HasOne(d => d.IdEmpresaNavigation).WithMany(p => p.Servicos).HasConstraintName("SYS_C002408516");
+            });
+
+            modelBuilder.Entity<TbTermosCondicoes>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("SYS_C002408503");
+
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+
+                entity.HasOne(d => d.IdUsuarioNavigation).WithMany(p => p.TermosCondicoes).HasConstraintName("SYS_C002408504");
+            });
+
+            modelBuilder.Entity<TbTransacoes>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("SYS_C002408511");
+
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+
+                entity.HasOne(d => d.IdContratoNavigation).WithMany(p => p.Transacoes).HasConstraintName("SYS_C002408512");
+            });
+
+            modelBuilder.Entity<TbUsuarios>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("SYS_C002408497");
+
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+
+                entity.HasOne(d => d.IdEmpresaNavigation).WithMany(p => p.Usuarios).HasConstraintName("SYS_C002408499");
+
+                entity.HasOne(d => d.IdInstituicaoNavigation).WithMany(p => p.Usuarios).HasConstraintName("SYS_C002408500");
+
+                entity.HasOne(d => d.IdPessoaFisicaNavigation).WithMany(p => p.Usuarios).HasConstraintName("SYS_C002408501");
+            });
+            modelBuilder.HasSequence("SEQ_CONTRATOS");
+            modelBuilder.HasSequence("SEQ_EMPRESAS");
+            modelBuilder.HasSequence("SEQ_EXIBICOES");
+            modelBuilder.HasSequence("SEQ_INSTITUICOES");
+            modelBuilder.HasSequence("SEQ_PESSOAS_FISICAS");
+            modelBuilder.HasSequence("SEQ_SERVICOS");
+            modelBuilder.HasSequence("SEQ_TERMOS_CONDICOES");
+            modelBuilder.HasSequence("SEQ_TRANSACOES");
+            modelBuilder.HasSequence("SEQ_USUARIOS");
+
+            OnModelCreatingPartial(modelBuilder);
         }
+
+        private void OnModelCreatingPartial(ModelBuilder modelBuilder) { }
     }
 }
