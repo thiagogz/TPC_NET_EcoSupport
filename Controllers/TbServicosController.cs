@@ -14,14 +14,12 @@ namespace TPC_EcoSupport.Controllers
             _context = context;
         }
 
-        // GET: TbServicos
         public async Task<IActionResult> Servicos()
         {
             return View(await _context.Servicos.ToListAsync());
         }
 
-        // GET: TbServicos/Details/5
-        public async Task<IActionResult> Details(decimal? id)
+        public async Task<IActionResult> GetById(decimal? id)
         {
             if (id == null)
             {
@@ -38,16 +36,9 @@ namespace TPC_EcoSupport.Controllers
             return View(tbServicos);
         }
 
-        // GET: TbServicos/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: TbServicos/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,IdEmpresa,DataServico,Descricao,Status")] TbServicos tbServicos)
+        public async Task<IActionResult> CreateServico([Bind("Id,IdEmpresa,DataServico,Descricao,Status")] TbServicos tbServicos)
         {
             if (ModelState.IsValid)
             {
@@ -58,26 +49,9 @@ namespace TPC_EcoSupport.Controllers
             return View(tbServicos);
         }
 
-        // GET: TbServicos/Edit/5
-        public async Task<IActionResult> Edit(decimal? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var tbServicos = await _context.Servicos.FindAsync(id);
-            if (tbServicos == null)
-            {
-                return NotFound();
-            }
-            return View(tbServicos);
-        }
-
-        // POST: TbServicos/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(decimal id, [Bind("Id,IdEmpresa,DataServico,Descricao,Status")] TbServicos tbServicos)
+        public async Task<IActionResult> UpdateServico(decimal id, [Bind("Id,IdEmpresa,DataServico,Descricao,Status")] TbServicos tbServicos)
         {
             if (id != tbServicos.Id)
             {
@@ -107,28 +81,9 @@ namespace TPC_EcoSupport.Controllers
             return View(tbServicos);
         }
 
-        // GET: TbServicos/Delete/5
-        public async Task<IActionResult> Delete(decimal? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var tbServicos = await _context.Servicos
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (tbServicos == null)
-            {
-                return NotFound();
-            }
-
-            return View(tbServicos);
-        }
-
-        // POST: TbServicos/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(decimal id)
+        public async Task<IActionResult> DeleteServico(decimal id)
         {
             var tbServicos = await _context.Servicos.FindAsync(id);
             _context.Servicos.Remove(tbServicos);

@@ -14,14 +14,12 @@ namespace TPC_EcoSupport.Controllers
             _context = context;
         }
 
-        // GET: TbContratos
         public async Task<IActionResult> Contratos()
         {
             return View(await _context.Contratos.ToListAsync());
         }
 
-        // GET: TbContratos/Details/5
-        public async Task<IActionResult> Details(decimal? id)
+        public async Task<IActionResult> GetById(decimal? id)
         {
             if (id == null)
             {
@@ -38,16 +36,9 @@ namespace TPC_EcoSupport.Controllers
             return View(tbContratos);
         }
 
-        // GET: TbContratos/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: TbContratos/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,IdEmpresa,TipoContrato,DataInicio,DataFim,Valor,Status,AssinaturaPendente")] TbContratos tbContratos)
+        public async Task<IActionResult> CreateContrato([Bind("Id,IdEmpresa,TipoContrato,DataInicio,DataFim,Valor,Status,AssinaturaPendente")] TbContratos tbContratos)
         {
             if (ModelState.IsValid)
             {
@@ -58,26 +49,10 @@ namespace TPC_EcoSupport.Controllers
             return View(tbContratos);
         }
 
-        // GET: TbContratos/Edit/5
-        public async Task<IActionResult> Edit(decimal? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
-            var tbContratos = await _context.Contratos.FindAsync(id);
-            if (tbContratos == null)
-            {
-                return NotFound();
-            }
-            return View(tbContratos);
-        }
-
-        // POST: TbContratos/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(decimal id, [Bind("Id,IdEmpresa,TipoContrato,DataInicio,DataFim,Valor,Status,AssinaturaPendente")] TbContratos tbContratos)
+        public async Task<IActionResult> UpdateContrato(decimal id, [Bind("Id,IdEmpresa,TipoContrato,DataInicio,DataFim,Valor,Status,AssinaturaPendente")] TbContratos tbContratos)
         {
             if (id != tbContratos.Id)
             {
@@ -107,28 +82,9 @@ namespace TPC_EcoSupport.Controllers
             return View(tbContratos);
         }
 
-        // GET: TbContratos/Delete/5
-        public async Task<IActionResult> Delete(decimal? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var tbContratos = await _context.Contratos
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (tbContratos == null)
-            {
-                return NotFound();
-            }
-
-            return View(tbContratos);
-        }
-
-        // POST: TbContratos/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(decimal id)
+        public async Task<IActionResult> DeleteContrato(decimal id)
         {
             var tbContratos = await _context.Contratos.FindAsync(id);
             _context.Contratos.Remove(tbContratos);

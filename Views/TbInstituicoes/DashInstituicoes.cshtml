@@ -1,5 +1,89 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model TPC_EcoSupport.Models.TbInstituicoes
+
 @{
+    ViewData["Title"] = "Dashboard Instituição";
+    var exibicaoList = ViewBag.ExibicaoList as List<TPC_EcoSupport.Models.Exibicao>;
+    var transacao = ViewBag.Transacao as TPC_EcoSupport.Models.Transacao;
+    var contrato = ViewBag.Contrato as TPC_EcoSupport.Models.Contrato;
 }
+
+<section class="content" style="padding-top: 1vh; background-color: #f8f9fa; color: #343a40;">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card card-primary card-outline" style="border: 1px solid rgba(0, 0, 0, .125); border-radius: .25rem;">
+                    <div class="card-body box-profile">
+                        @if (Model != null)
+                        {
+                            <h3 class="profile-username text-center">@Model.Nome</h3>
+                            <a href="" class="btn btn-primary button-edit-profile" data-toggle="tab" style="display: flex; justify-content: center; align-items: center; background-color: #1b6ec2; border-color: #1b6ec2;"><b>Editar Perfil</b></a>
+                        }
+                        else
+                        {
+                            <p class="text-center">Informações da instituição não disponíveis.</p>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="card" style="border: 1px solid rgba(0, 0, 0, .125); border-radius: .25rem;">
+                    <div class="card-body" style="display: flex; justify-content: space-evenly;">
+                        @if (Model != null)
+                        {
+                            <div style="display: flex; flex-direction: column; align-items: center;">
+                                <h3 style="border: 1px solid rgba(0, 0, 0, .5); border-radius: .25rem; padding: 0.25rem .75rem; margin-bottom: 0;">Informações da Instituição</h3>
+                                <p><strong>CNPJ:</strong> @Model.Cnpj</p>
+                                <p><strong>Email:</strong> @Model.Email</p>
+                                <p><strong>Telefone:</strong> @Model.Telefone</p>
+                                <p><strong>Endereço:</strong> @Model.Endereco</p>
+                            </div>
+                        }
+                        else
+                        {
+                            <p class="text-center">Informações da instituição não disponíveis.</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-9" style="width: -webkit-fill-available;">
+                <div class="card" style="border: 1px solid rgba(0, 0, 0, .125); border-radius: .25rem;">
+                    <div class="card-body" style="display: flex; justify-content: space-evenly;">
+                        @if (exibicaoList != null && exibicaoList.Count > 0 && Model != null)
+                        {
+                            @foreach (var exibicao in exibicaoList.Where(e => e.Id == Model.Id))
+                            {
+                                <div style="display: flex; flex-direction: column; align-items: center;">
+                                    <h3 style="border: 1px solid rgba(0, 0, 0, .5); border-radius: .25rem; padding: 0.25rem .75rem; margin-bottom: 0;">Informações de Contratos</h3>
+                                    <p><strong>Tipo:</strong> @contrato?.TipoContrato</p>
+                                    <p><strong>Data Início:</strong> @contrato?.DataInicio.ToShortDateString()</p>
+                                    <p><strong>Data Fim:</strong> @contrato?.DataFim.ToShortDateString()</p>
+                                    <p><strong>Valor:</strong> @contrato?.Valor.ToString("C")</p>
+                                    <p><strong>Status:</strong> @contrato?.Status</p>
+                                </div>
+                                <div style="display: flex; flex-direction: column; align-items: center;">
+                                    <h3 style="border: 1px solid rgba(0, 0, 0, .5); border-radius: .25rem; padding: 0.25rem .75rem; margin-bottom: 0;">Última Transação</h3>
+                                    <p><strong>Data:</strong> @transacao?.Data.ToShortDateString()</p>
+                                    <p><strong>Valor:</strong> @transacao?.Valor.ToString("C")</p>
+                                    <p><strong>Descrição:</strong> @transacao?.Descricao</p>
+                                </div>
+                                <div style="display: flex; flex-direction: column; align-items: center;">
+                                    <h3 style="border: 1px solid rgba(0, 0, 0, .5); border-radius: .25rem; padding: 0.25rem .75rem; margin-bottom: 0;">Exibição</h3>
+                                    <p><strong>Data Exibição:</strong> @exibicao.DataExibicao.ToShortDateString()</p>
+                                    <p><strong>Valor:</strong> @exibicao.Valor.ToString("C")</p>
+                                    <p><strong>Descrição:</strong> @exibicao.Descricao</p>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <p class="text-center">Nenhuma exibição encontrada para esta instituição.</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

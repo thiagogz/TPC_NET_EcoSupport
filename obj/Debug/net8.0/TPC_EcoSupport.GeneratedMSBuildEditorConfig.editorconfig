@@ -58,8 +58,8 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGJJbnN0aXR1aWNvZXNcSW5zdGl0dWljb2VzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Thiago/source/repos/TPC_EcoSupport/Views/TbPessoasFisicas/DashPessoaFisica.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGJQZXNzb2FzRmlzaWNhc1xEYXNoUGVzc29hRmlzaWNhLmNzaHRtbA==
+[C:/Users/Thiago/source/repos/TPC_EcoSupport/Views/TbPessoasFisicas/DashPessoasFisicas.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGJQZXNzb2FzRmlzaWNhc1xEYXNoUGVzc29hc0Zpc2ljYXMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Thiago/source/repos/TPC_EcoSupport/Views/TbPessoasFisicas/PessoasFisicas.cshtml]

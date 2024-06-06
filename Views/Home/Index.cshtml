@@ -1,8 +1,33 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card" style="border: none; border-radius: .25rem;">
+                    <div class="card-body">
+                        <h1 class="text-center mb-4" style="font-size: 3rem;">Bem-vindo à EcoSupport</h1>
+                        <p style="font-size: 1.2rem; line-height: 2rem; text-align: justify;">Em um mundo onde a preocupação com o meio ambiente nunca foi tão urgente, a EcoSupport se destaca como uma força motriz na luta pela preservação costeira. Nossa missão vai além da filantropia corporativa. Somos agentes de mudança, conectando empresas visionárias à restauração de ecossistemas vitais.</p>
+                        <hr>
+                        <h2 class="text-center mb-4" style="font-size: 2rem;">O que fazemos</h2>
+                        <p style="font-size: 1.2rem; line-height: 2rem; text-align: justify;">Desenvolvemos soluções inovadoras que convergem a excelência empresarial com a preservação ambiental. Nossa plataforma permite que empresas direcionem uma parte de suas vendas para projetos de limpeza costeira, criando um ciclo virtuoso de responsabilidade e impacto positivo.</p>
+                        <hr>
+                        <h2 class="text-center mb-4" style="font-size: 2rem;">Por que é importante</h2>
+                        <p style="font-size: 1.2rem; line-height: 2rem; text-align: justify;">A saúde de nossos oceanos é crucial para o equilíbrio ecológico do planeta. A poluição costeira ameaça a vida marinha, compromete a segurança alimentar e afeta diretamente as comunidades costeiras. Ao enfrentar esse desafio de frente, não apenas protegemos os oceanos, mas também defendemos o bem-estar de milhões de pessoas em todo o mundo.</p>
+                        <hr>
+                        <h2 class="text-center mb-4" style="font-size: 2rem;">Junte-se a nós</h2>
+                        <p style="font-size: 1.2rem; line-height: 2rem; text-align: justify;">Você também pode fazer parte desta jornada transformadora. Ao se cadastrar em nossa plataforma, você se conecta a uma comunidade global de empresas comprometidas com a sustentabilidade. Juntos, podemos criar um futuro mais limpo, mais saudável e mais sustentável para todos.</p>
+                        <div class="text-center mt-5">
+                            <a class="btn btn-primary btn-lg" asp-area="" asp-controller="TbUsuarios" asp-action="LoginPage">Login</a>
+                            <a class="btn btn-success btn-lg" asp-area="" asp-controller="TbUsuarios" asp-action="CadastroPage">Cadastro</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+

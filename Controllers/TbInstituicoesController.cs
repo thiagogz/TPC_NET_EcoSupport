@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using System.Linq;
 using TPC_EcoSupport.Data;
 using TPC_EcoSupport.Models;
 
@@ -14,14 +16,12 @@ namespace TPC_EcoSupport.Controllers
             _context = context;
         }
 
-        // GET: TbInstituicoes
         public async Task<IActionResult> Instituicoes()
         {
             return View(await _context.Instituicoes.ToListAsync());
         }
 
-        // GET: TbInstituicoes/Details/5
-        public async Task<IActionResult> Details(decimal? id)
+        public async Task<IActionResult> DashInstituicoes(decimal? id)
         {
             if (id == null)
             {
@@ -35,19 +35,38 @@ namespace TPC_EcoSupport.Controllers
                 return NotFound();
             }
 
+            var client = new HttpClient();
+            var response = await client.GetAsync("http://ecosupport-production.up.railway.app/exibicoes");
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(jsonString);
+
+            if (apiResponse != null && apiResponse.Embedded != null && apiResponse.Embedded.ExibicaoList != null)
+            {
+                ViewBag.ExibicaoList = apiResponse.Embedded.ExibicaoList
+                    .Where(e => e.Transacao.Contrato.Empresa.Id == id)
+                    .ToList();
+                ViewBag.Transacao = apiResponse.Embedded.ExibicaoList
+                    .Where(e => e.Transacao.Contrato.Empresa.Id == id)
+                    .Select(e => e.Transacao)
+                    .FirstOrDefault();
+                ViewBag.Contrato = apiResponse.Embedded.ExibicaoList
+                    .Where(e => e.Transacao.Contrato.Empresa.Id == id)
+                    .Select(e => e.Transacao.Contrato)
+                    .FirstOrDefault();
+            }
+            else
+            {
+                ViewBag.ExibicaoList = new List<Exibicao>();
+                ViewBag.Transacao = null;
+                ViewBag.Contrato = null;
+            }
+
             return View(tbInstituicoes);
         }
 
-        // GET: TbInstituicoes/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: TbInstituicoes/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nome,Cnpj,Email,Telefone,Endereco")] TbInstituicoes tbInstituicoes)
+        public async Task<IActionResult> CriarInstituicao([Bind("Id,Nome,Cnpj,Email,Telefone,Endereco")] TbInstituicoes tbInstituicoes)
         {
             if (ModelState.IsValid)
             {
@@ -58,30 +77,13 @@ namespace TPC_EcoSupport.Controllers
             return View(tbInstituicoes);
         }
 
-        // GET: TbInstituicoes/Edit/5
-        public async Task<IActionResult> Edit(decimal? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var tbInstituicoes = await _context.Instituicoes.FindAsync(id);
-            if (tbInstituicoes == null)
-            {
-                return NotFound();
-            }
-            return View(tbInstituicoes);
-        }
-
-        // POST: TbInstituicoes/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(decimal id, [Bind("Id,Nome,Cnpj,Email,Telefone,Endereco")] TbInstituicoes tbInstituicoes)
+        public async Task<IActionResult> UpdateInstituicao(decimal id, [Bind("Id,Nome,Cnpj,Email,Telefone,Endereco")] TbInstituicoes tbInstituicoes)
         {
             if (id != tbInstituicoes.Id)
             {
-                return NotFound();
+                return BadRequest("ID não encontrado.");
             }
 
             if (ModelState.IsValid)
@@ -95,7 +97,7 @@ namespace TPC_EcoSupport.Controllers
                 {
                     if (!TbInstituicoesExists(tbInstituicoes.Id))
                     {
-                        return NotFound();
+                        return BadRequest("Instituição não existente.");
                     }
                     else
                     {
@@ -107,28 +109,9 @@ namespace TPC_EcoSupport.Controllers
             return View(tbInstituicoes);
         }
 
-        // GET: TbInstituicoes/Delete/5
-        public async Task<IActionResult> Delete(decimal? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var tbInstituicoes = await _context.Instituicoes
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (tbInstituicoes == null)
-            {
-                return NotFound();
-            }
-
-            return View(tbInstituicoes);
-        }
-
-        // POST: TbInstituicoes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(decimal id)
+        public async Task<IActionResult> DeleteInstituicao(decimal id)
         {
             var tbInstituicoes = await _context.Instituicoes.FindAsync(id);
             _context.Instituicoes.Remove(tbInstituicoes);

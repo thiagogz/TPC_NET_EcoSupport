@@ -14,14 +14,12 @@ namespace TPC_EcoSupport.Controllers
             _context = context;
         }
 
-        // GET: TbExibicoes
         public async Task<IActionResult> Exibicoes()
         {
             return View(await _context.Exibicoes.ToListAsync());
         }
 
-        // GET: TbExibicoes/Details/5
-        public async Task<IActionResult> Details(decimal? id)
+        public async Task<IActionResult> GetById(decimal? id)
         {
             if (id == null)
             {
@@ -38,16 +36,9 @@ namespace TPC_EcoSupport.Controllers
             return View(tbExibicoes);
         }
 
-        // GET: TbExibicoes/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: TbExibicoes/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,IdTransacao,Valor,DataExibicao,Descricao")] TbExibicoes tbExibicoes)
+        public async Task<IActionResult> CreateExibicao([Bind("Id,IdTransacao,Valor,DataExibicao,Descricao")] TbExibicoes tbExibicoes)
         {
             if (ModelState.IsValid)
             {
@@ -58,26 +49,9 @@ namespace TPC_EcoSupport.Controllers
             return View(tbExibicoes);
         }
 
-        // GET: TbExibicoes/Edit/5
-        public async Task<IActionResult> Edit(decimal? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var tbExibicoes = await _context.Exibicoes.FindAsync(id);
-            if (tbExibicoes == null)
-            {
-                return NotFound();
-            }
-            return View(tbExibicoes);
-        }
-
-        // POST: TbExibicoes/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(decimal id, [Bind("Id,IdTransacao,Valor,DataExibicao,Descricao")] TbExibicoes tbExibicoes)
+        public async Task<IActionResult> UpdateExibicao(decimal id, [Bind("Id,IdTransacao,Valor,DataExibicao,Descricao")] TbExibicoes tbExibicoes)
         {
             if (id != tbExibicoes.Id)
             {
@@ -107,28 +81,9 @@ namespace TPC_EcoSupport.Controllers
             return View(tbExibicoes);
         }
 
-        // GET: TbExibicoes/Delete/5
-        public async Task<IActionResult> Delete(decimal? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var tbExibicoes = await _context.Exibicoes
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (tbExibicoes == null)
-            {
-                return NotFound();
-            }
-
-            return View(tbExibicoes);
-        }
-
-        // POST: TbExibicoes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(decimal id)
+        public async Task<IActionResult> DeleteExibicao(decimal id)
         {
             var tbExibicoes = await _context.Exibicoes.FindAsync(id);
             _context.Exibicoes.Remove(tbExibicoes);

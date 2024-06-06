@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using TPC_EcoSupport.Data;
 using TPC_EcoSupport.Models;
 
@@ -14,40 +15,49 @@ namespace TPC_EcoSupport.Controllers
             _context = context;
         }
 
-        // GET: TbPessoasFisicas
         public async Task<IActionResult> PessoasFisicas()
         {
             return View(await _context.PessoasFisicas.ToListAsync());
         }
 
-        // GET: TbPessoasFisicas/Details/5
-        public async Task<IActionResult> Details(decimal? id)
+        public async Task<IActionResult> DashPessoasFisicas(decimal? id)
         {
-            if (id == null)
+            var pessoaFisica = await _context.PessoasFisicas
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (pessoaFisica == null)
             {
                 return NotFound();
             }
 
-            var tbPessoasFisicas = await _context.PessoasFisicas
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (tbPessoasFisicas == null)
+            var client = new HttpClient();
+            var responseExibicoes = await client.GetAsync("http://ecosupport-production.up.railway.app/exibicoes");
+            var jsonStringExibicoes = await responseExibicoes.Content.ReadAsStringAsync();
+            var apiResponseExibicoes = JsonConvert.DeserializeObject<ApiResponse>(jsonStringExibicoes);
+
+            var responseInstituicoes = await client.GetAsync("http://ecosupport-production.up.railway.app/instituicoes");
+            var jsonStringInstituicoes = await responseInstituicoes.Content.ReadAsStringAsync();
+            var apiResponseInstituicoes = JsonConvert.DeserializeObject<ApiResponse>(jsonStringInstituicoes);
+
+
+            if (apiResponseExibicoes != null && apiResponseExibicoes.Embedded != null && apiResponseExibicoes.Embedded.ExibicaoList != null &&
+        apiResponseInstituicoes != null && apiResponseInstituicoes.Embedded != null && apiResponseInstituicoes.Embedded.InstituicaoList != null)
             {
-                return NotFound();
+                ViewBag.ExibicaoList = apiResponseExibicoes.Embedded.ExibicaoList;
+                ViewBag.InstituicaoList = apiResponseInstituicoes.Embedded.InstituicaoList;
+            }
+            else
+            {
+                ViewBag.ExibicaoList = new List<Exibicao>();
+                ViewBag.InstituicaoList = new List<Instituicao>();
             }
 
-            return View(tbPessoasFisicas);
+            return View(pessoaFisica);
         }
 
-        // GET: TbPessoasFisicas/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: TbPessoasFisicas/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nome,Cpf,Email,Senha")] TbPessoasFisicas tbPessoasFisicas)
+        public async Task<IActionResult> CreatePessoaFisica([Bind("Id,Nome,Cpf,Email,Senha")] TbPessoasFisicas tbPessoasFisicas)
         {
             if (ModelState.IsValid)
             {
@@ -58,26 +68,9 @@ namespace TPC_EcoSupport.Controllers
             return View(tbPessoasFisicas);
         }
 
-        // GET: TbPessoasFisicas/Edit/5
-        public async Task<IActionResult> Edit(decimal? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var tbPessoasFisicas = await _context.PessoasFisicas.FindAsync(id);
-            if (tbPessoasFisicas == null)
-            {
-                return NotFound();
-            }
-            return View(tbPessoasFisicas);
-        }
-
-        // POST: TbPessoasFisicas/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(decimal id, [Bind("Id,Nome,Cpf,Email,Senha")] TbPessoasFisicas tbPessoasFisicas)
+        public async Task<IActionResult> UpdatePessoaFisica(decimal id, [Bind("Id,Nome,Cpf,Email,Senha")] TbPessoasFisicas tbPessoasFisicas)
         {
             if (id != tbPessoasFisicas.Id)
             {
@@ -107,28 +100,9 @@ namespace TPC_EcoSupport.Controllers
             return View(tbPessoasFisicas);
         }
 
-        // GET: TbPessoasFisicas/Delete/5
-        public async Task<IActionResult> Delete(decimal? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var tbPessoasFisicas = await _context.PessoasFisicas
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (tbPessoasFisicas == null)
-            {
-                return NotFound();
-            }
-
-            return View(tbPessoasFisicas);
-        }
-
-        // POST: TbPessoasFisicas/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(decimal id)
+        public async Task<IActionResult> DeletePessoaFisica(decimal id)
         {
             var tbPessoasFisicas = await _context.PessoasFisicas.FindAsync(id);
             _context.PessoasFisicas.Remove(tbPessoasFisicas);

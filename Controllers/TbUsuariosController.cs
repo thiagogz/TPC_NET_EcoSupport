@@ -29,7 +29,7 @@ namespace TPC_EcoSupport.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Details(decimal? id)
+        public async Task<IActionResult> GetByID(decimal? id)
         {
             if (id == null)
             {
@@ -52,7 +52,6 @@ namespace TPC_EcoSupport.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Reset IDs based on the selected type
                 if (tbUsuarios.Tipo == "pf")
                 {
                     tbUsuarios.IdEmpresa = null;
@@ -85,7 +84,6 @@ namespace TPC_EcoSupport.Controllers
         {
             if (string.IsNullOrEmpty(Email) || string.IsNullOrEmpty(Senha))
             {
-                // Adicionar mensagem de erro, se necessário
                 return BadRequest("E-mail ou senha não inseridos!");
             }
 
@@ -105,7 +103,6 @@ namespace TPC_EcoSupport.Controllers
                 return BadRequest("Senha incorreta.");
             }
 
-            // Redirecionar com base no tipo de usuário
             if (usuario.Tipo == "pf")
             {
                 return RedirectToAction("DashPessoaFisica", "TbPessoasFisicas", new { id = usuario.PessoaFisica.Id });
@@ -122,25 +119,9 @@ namespace TPC_EcoSupport.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Edit(decimal? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var tbUsuarios = await _context.Usuarios.FindAsync(id);
-            if (tbUsuarios == null)
-            {
-                return NotFound();
-            }
-            return View(tbUsuarios);
-        }
-
-        // POST: TbUsuarios/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(decimal id, [Bind("Id,Nome,Email,Senha,Tipo,IdEmpresa,IdInstituicao,IdPessoaFisica")] TbUsuarios tbUsuarios)
+        public async Task<IActionResult> UpdateUsuario(decimal id, [Bind("Id,Nome,Email,Senha,Tipo,IdEmpresa,IdInstituicao,IdPessoaFisica")] TbUsuarios tbUsuarios)
         {
             if (id != tbUsuarios.Id)
             {
@@ -170,28 +151,9 @@ namespace TPC_EcoSupport.Controllers
             return View(tbUsuarios);
         }
 
-        // GET: TbUsuarios/Delete/5
-        public async Task<IActionResult> Delete(decimal? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var tbUsuarios = await _context.Usuarios
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (tbUsuarios == null)
-            {
-                return NotFound();
-            }
-
-            return View(tbUsuarios);
-        }
-
-        // POST: TbUsuarios/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(decimal id)
+        public async Task<IActionResult> DeleteUsuario(decimal id)
         {
             var tbUsuarios = await _context.Usuarios.FindAsync(id);
             _context.Usuarios.Remove(tbUsuarios);

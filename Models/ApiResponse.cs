@@ -42,9 +42,20 @@ namespace TPC_EcoSupport.Models
         public string Descricao { get; set; }
     }
 
+    public class Instituicao
+    {
+        public int Id { get; set; }
+        public string Nome { get; set; }
+        public string Cnpj { get; set; }
+        public string Email { get; set; }
+        public string Telefone { get; set; }
+        public string Endereco { get; set; }
+    }
+
     public class Embedded
     {
         public List<Exibicao> ExibicaoList { get; set; }
+        public List<Instituicao> InstituicaoList { get; set; }
     }
 
     public class Links

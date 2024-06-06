@@ -23,7 +23,6 @@ namespace TPC_EcoSupport.Controllers
 
         public async Task<IActionResult> DashEmpresas(decimal id)
         {
-            // Buscando a empresa com as coleções relacionadas
             var empresa = await _context.Empresas
                 .Include(e => e.Usuarios)
                 .Include(e => e.Contratos)
@@ -35,7 +34,6 @@ namespace TPC_EcoSupport.Controllers
                 return NotFound();
             }
 
-            // Consumir a API para obter dados de exibição
             var client = new HttpClient();
             var response = await client.GetAsync("http://ecosupport-production.up.railway.app/exibicoes");
             var jsonString = await response.Content.ReadAsStringAsync();
@@ -57,7 +55,6 @@ namespace TPC_EcoSupport.Controllers
             }
             else
             {
-                // Se a resposta da API ou a lista de exibições estiverem nulas, defina as ViewBags como vazias
                 ViewBag.ExibicaoList = new List<Exibicao>();
                 ViewBag.Transacao = null;
                 ViewBag.Contrato = null;
@@ -66,10 +63,7 @@ namespace TPC_EcoSupport.Controllers
             return View(empresa);
         }
 
-
-
-        // GET: TbEmpresas/Details/5
-        public async Task<IActionResult> Details(decimal? id)
+        public async Task<IActionResult> GetById(decimal? id)
         {
             if (id == null)
             {
@@ -86,16 +80,9 @@ namespace TPC_EcoSupport.Controllers
             return View(tbEmpresas);
         }
 
-        // GET: TbEmpresas/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: TbEmpresas/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nome,Cnpj,Email,Telefone,Endereco")] TbEmpresas tbEmpresas)
+        public async Task<IActionResult> CreateEmpresa([Bind("Id,Nome,Cnpj,Email,Telefone,Endereco")] TbEmpresas tbEmpresas)
         {
             if (ModelState.IsValid)
             {
@@ -106,26 +93,9 @@ namespace TPC_EcoSupport.Controllers
             return View(tbEmpresas);
         }
 
-        // GET: TbEmpresas/Edit/5
-        public async Task<IActionResult> Edit(decimal? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var tbEmpresas = await _context.Empresas.FindAsync(id);
-            if (tbEmpresas == null)
-            {
-                return NotFound();
-            }
-            return View(tbEmpresas);
-        }
-
-        // POST: TbEmpresas/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(decimal id, [Bind("Id,Nome,Cnpj,Email,Telefone,Endereco")] TbEmpresas tbEmpresas)
+        public async Task<IActionResult> UpdateEmpresa(decimal id, [Bind("Id,Nome,Cnpj,Email,Telefone,Endereco")] TbEmpresas tbEmpresas)
         {
             if (id != tbEmpresas.Id)
             {
@@ -155,28 +125,9 @@ namespace TPC_EcoSupport.Controllers
             return View(tbEmpresas);
         }
 
-        // GET: TbEmpresas/Delete/5
-        public async Task<IActionResult> Delete(decimal? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var tbEmpresas = await _context.Empresas
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (tbEmpresas == null)
-            {
-                return NotFound();
-            }
-
-            return View(tbEmpresas);
-        }
-
-        // POST: TbEmpresas/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(decimal id)
+        public async Task<IActionResult> DeleteEmpresa(decimal id)
         {
             var tbEmpresas = await _context.Empresas.FindAsync(id);
             _context.Empresas.Remove(tbEmpresas);

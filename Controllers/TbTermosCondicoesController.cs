@@ -14,14 +14,12 @@ namespace TPC_EcoSupport.Controllers
             _context = context;
         }
 
-        // GET: TbTermosCondicoes
         public async Task<IActionResult> TermosCondicoes()
         {
             return View(await _context.TermosCondicoes.ToListAsync());
         }
 
-        // GET: TbTermosCondicoes/Details/5
-        public async Task<IActionResult> Details(decimal? id)
+        public async Task<IActionResult> GetById(decimal? id)
         {
             if (id == null)
             {
@@ -38,16 +36,9 @@ namespace TPC_EcoSupport.Controllers
             return View(tbTermosCondicoes);
         }
 
-        // GET: TbTermosCondicoes/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: TbTermosCondicoes/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,IdUsuario,Aceitou,DataAceite")] TbTermosCondicoes tbTermosCondicoes)
+        public async Task<IActionResult> CreateTermoCondicao([Bind("Id,IdUsuario,Aceitou,DataAceite")] TbTermosCondicoes tbTermosCondicoes)
         {
             if (ModelState.IsValid)
             {
@@ -58,26 +49,9 @@ namespace TPC_EcoSupport.Controllers
             return View(tbTermosCondicoes);
         }
 
-        // GET: TbTermosCondicoes/Edit/5
-        public async Task<IActionResult> Edit(decimal? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var tbTermosCondicoes = await _context.TermosCondicoes.FindAsync(id);
-            if (tbTermosCondicoes == null)
-            {
-                return NotFound();
-            }
-            return View(tbTermosCondicoes);
-        }
-
-        // POST: TbTermosCondicoes/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(decimal id, [Bind("Id,IdUsuario,Aceitou,DataAceite")] TbTermosCondicoes tbTermosCondicoes)
+        public async Task<IActionResult> UpdateTermoCondicao(decimal id, [Bind("Id,IdUsuario,Aceitou,DataAceite")] TbTermosCondicoes tbTermosCondicoes)
         {
             if (id != tbTermosCondicoes.Id)
             {
@@ -107,28 +81,9 @@ namespace TPC_EcoSupport.Controllers
             return View(tbTermosCondicoes);
         }
 
-        // GET: TbTermosCondicoes/Delete/5
-        public async Task<IActionResult> Delete(decimal? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var tbTermosCondicoes = await _context.TermosCondicoes
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (tbTermosCondicoes == null)
-            {
-                return NotFound();
-            }
-
-            return View(tbTermosCondicoes);
-        }
-
-        // POST: TbTermosCondicoes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(decimal id)
+        public async Task<IActionResult> DeleteTermoCondicao(decimal id)
         {
             var tbTermosCondicoes = await _context.TermosCondicoes.FindAsync(id);
             _context.TermosCondicoes.Remove(tbTermosCondicoes);

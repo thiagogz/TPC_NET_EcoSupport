@@ -1,0 +1,106 @@
+﻿@model TPC_EcoSupport.Models.TbPessoasFisicas
+
+@{
+    ViewData["Title"] = "Dashboard Pessoas Físicas";
+    var exibicaoList = ViewBag.ExibicaoList as List<TPC_EcoSupport.Models.Exibicao>;
+    var instituicaoList = ViewBag.InstituicaoList as List<TPC_EcoSupport.Models.Instituicao>;
+}
+
+<section class="content" style="padding-top: 1vh; background-color: #f8f9fa; color: #343a40;">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card card-primary card-outline" style="border: 1px solid rgba(0, 0, 0, .125); border-radius: .25rem;">
+                    <div class="card-body box-profile">
+                        @if (Model != null)
+                        {
+                            <h3 class="profile-username text-center">@Model.Nome</h3>
+                            <a href="" class="btn btn-primary button-edit-profile" data-toggle="tab" style="display: flex; justify-content: center; align-items: center; background-color: #1b6ec2; border-color: #1b6ec2;"><b>Editar Perfil</b></a>
+                        }
+                        else
+                        {
+                            <p class="text-center">Informações da instituição não disponíveis.</p>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="card" style="border: 1px solid rgba(0, 0, 0, .125); border-radius: .25rem;">
+                    <div class="card-body" style="display: flex; justify-content: space-evenly;">
+                        @if (Model != null)
+                        {
+                            <div style="display: flex; flex-direction: column; align-items: center;">
+                                <h3 style="border: 1px solid rgba(0, 0, 0, .5); border-radius: .25rem; padding: 0.25rem .75rem; margin-bottom: 0;">Informações de Pessoa Física</h3>
+                                <p><strong>Nome:</strong> @Model.Nome</p>
+                                <p><strong>CPF:</strong> @Model.Cpf</p>
+                                <p><strong>Email:</strong> @Model.Email</p>
+                            </div>
+                        }
+                        else
+                        {
+                            <p class="text-center">Informações da instituição não disponíveis.</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-9" style="width: -webkit-fill-available;">
+                <div class="card" style="border: 1px solid rgba(0, 0, 0, .125); border-radius: .25rem;">
+                    @if (exibicaoList != null && exibicaoList.Count > 0 && instituicaoList != null && instituicaoList.Count > 0)
+                    {
+                        @foreach (var exibicao in exibicaoList)
+                        {
+                            <h2 style="text-align: center;">Contrato Nº @exibicao.Transacao.Contrato.Id</h2>
+                            <div class="card-body" style="display: flex; justify-content: space-between; text-align: center;">
+                                <div style="display: flex; flex-direction: column; align-items: center;">
+                                    <h3>Informações de Contratos</h3>
+                                    <p><strong>Tipo:</strong> @exibicao.Transacao.Contrato.TipoContrato</p>
+                                    <p><strong>Data Início:</strong> @exibicao.Transacao.Contrato.DataInicio.ToShortDateString()</p>
+                                    <p><strong>Data Fim:</strong> @exibicao.Transacao.Contrato.DataFim.ToShortDateString()</p>
+                                    <p><strong>Valor:</strong> @exibicao.Transacao.Contrato.Valor.ToString("C")</p>
+                                    <p><strong>Status:</strong> @exibicao.Transacao.Contrato.Status</p>
+                                </div>
+                                <div style="display: flex; flex-direction: column; align-items: center;">
+                                    <h3>Última Transação</h3>
+                                    <p><strong>Data:</strong> @exibicao.Transacao.Data.ToShortDateString()</p>
+                                    <p><strong>Valor:</strong> @exibicao.Transacao.Valor.ToString("C")</p>
+                                    <p><strong>Descrição:</strong> @exibicao.Transacao.Descricao</p>
+                                </div>
+                                <div style="display: flex; flex-direction: column; align-items: center;">
+                                    <h3>Exibição</h3>
+                                    <p><strong>Data Exibição:</strong> @exibicao.DataExibicao.ToShortDateString()</p>
+                                    <p><strong>Valor:</strong> @exibicao.Valor.ToString("C")</p>
+                                    <p><strong>Descrição:</strong> @exibicao.Descricao</p>
+                                </div>
+                                <div style="display: flex; flex-direction: column; align-items: center;">
+                                    <h3>Instituição Relacionada</h3>
+                                    @{
+                                        var instituicao = instituicaoList.FirstOrDefault(i => i.Id == exibicao.Id);
+                                    }
+                                    @if (instituicao != null)
+                                    {
+                                        <p><strong>Nome:</strong> @instituicao.Nome</p>
+                                        <p><strong>Cnpj:</strong> @instituicao.Cnpj</p>
+                                        <p><strong>Email:</strong> @instituicao.Email</p>
+                                        <p><strong>Endereco:</strong> @instituicao.Endereco</p>
+                                        <p><strong>Telefone:</strong> @instituicao.Telefone</p>
+                                    }
+                                    else
+                                    {
+                                        <p>Instituição não encontrada para esta exibição.</p>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p class="text-center">Nenhuma exibição encontrada para esta instituição.</p>
+                    }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
