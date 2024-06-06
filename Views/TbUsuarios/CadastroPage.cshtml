@@ -1,0 +1,93 @@
+﻿@model TPC_EcoSupport.Models.TbUsuarios
+
+@{
+    ViewData["Title"] = "Cadastrar Usuário";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="register-page" style="background-color:#0E1015">
+    <div class="register-box">
+        <div class="card">
+            <div class="card-body register-card-body">
+                <p class="login-box-msg">Cadastre-se</p>
+
+                <form asp-controller="TbUsuarios" asp-action="CadastrarUsuario" method="post">
+                    <div class="input-group mb-3">
+                        <input name="Nome" type="text" class="form-control" placeholder="Nome" required>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input name="Email" type="email" class="form-control" placeholder="E-mail" required>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input name="Senha" type="password" class="form-control" placeholder="Senha" required>
+                    </div>
+                    <div class="input-group mb-3">
+                        <label class="form-label">Tipo</label>
+                        <div class="btn-group w-100" role="group" aria-label="Tipo de Usuário">
+                            <input type="radio" class="btn-check" name="Tipo" id="tipoPf" autocomplete="off" value="pf" checked>
+                            <label class="btn btn-outline-primary w-33" for="tipoPf">Pessoa Física</label>
+
+                            <input type="radio" class="btn-check" name="Tipo" id="tipoEmpresa" autocomplete="off" value="empresa">
+                            <label class="btn btn-outline-primary w-33" for="tipoEmpresa">Empresa</label>
+
+                            <input type="radio" class="btn-check" name="Tipo" id="tipoInstituicao" autocomplete="off" value="instituicao">
+                            <label class="btn btn-outline-primary w-33" for="tipoInstituicao">Instituição</label>
+                        </div>
+                    </div>
+
+                    <div id="empresaFields" class="input-group mb-3 d-none">
+                        <input name="IdEmpresa" type="hidden" value="1">
+                    </div>
+
+                    <div id="instituicaoFields" class="input-group mb-3 d-none">
+                        <input name="IdInstituicao" type="hidden" value="1">
+                    </div>
+
+                    <div id="pessoaFisicaFields" class="input-group mb-3">
+                        <input name="IdPessoaFisica" type="hidden" value="1">
+                    </div>
+
+                    <div class="row">
+                        <div class="col-4">
+                            <button type="submit" class="btn btn-primary btn-block">Registrar</button>
+                        </div>
+                    </div>
+                </form>
+                <p class="mb-0">
+                    <a asp-controller="TbUsuarios" asp-action="LoginPage" class="text-center">Logar</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var tipoRadios = document.querySelectorAll('input[name="Tipo"]');
+            tipoRadios.forEach(function (radio) {
+                radio.addEventListener("change", function () {
+                    toggleFields(this.value);
+                });
+            });
+
+            function toggleFields(tipo) {
+                document.getElementById("empresaFields").classList.add("d-none");
+                document.getElementById("instituicaoFields").classList.add("d-none");
+                document.getElementById("pessoaFisicaFields").classList.add("d-none");
+
+                if (tipo === "pf") {
+                    document.getElementById("pessoaFisicaFields").classList.remove("d-none");
+                } else if (tipo === "empresa") {
+                    document.getElementById("empresaFields").classList.remove("d-none");
+                } else if (tipo === "instituicao") {
+                    document.getElementById("instituicaoFields").classList.remove("d-none");
+                }
+            }
+
+            // Initialize the form based on the default selected type
+            toggleFields(document.querySelector('input[name="Tipo"]:checked').value);
+        });
+    </script>
+}

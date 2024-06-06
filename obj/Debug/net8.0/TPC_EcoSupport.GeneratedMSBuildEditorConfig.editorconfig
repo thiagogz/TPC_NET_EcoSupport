@@ -38,6 +38,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGJDb250cmF0b3NcQ29udHJhdG9zLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Thiago/source/repos/TPC_EcoSupport/Views/TbEmpresas/DashEmpresas.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGJFbXByZXNhc1xEYXNoRW1wcmVzYXMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Thiago/source/repos/TPC_EcoSupport/Views/TbEmpresas/Empresas.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGJFbXByZXNhc1xFbXByZXNhcy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -46,8 +50,16 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGJFeGliaWNvZXNcRXhpYmljb2VzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Thiago/source/repos/TPC_EcoSupport/Views/TbInstituicoes/DashInstituicoes.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGJJbnN0aXR1aWNvZXNcRGFzaEluc3RpdHVpY29lcy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Thiago/source/repos/TPC_EcoSupport/Views/TbInstituicoes/Instituicoes.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGJJbnN0aXR1aWNvZXNcSW5zdGl0dWljb2VzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Thiago/source/repos/TPC_EcoSupport/Views/TbPessoasFisicas/DashPessoaFisica.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGJQZXNzb2FzRmlzaWNhc1xEYXNoUGVzc29hRmlzaWNhLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Thiago/source/repos/TPC_EcoSupport/Views/TbPessoasFisicas/PessoasFisicas.cshtml]
@@ -64,6 +76,14 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Thiago/source/repos/TPC_EcoSupport/Views/TbTransacoes/Transacoes.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGJUcmFuc2Fjb2VzXFRyYW5zYWNvZXMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Thiago/source/repos/TPC_EcoSupport/Views/TbUsuarios/CadastroPage.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGJVc3Vhcmlvc1xDYWRhc3Ryb1BhZ2UuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Thiago/source/repos/TPC_EcoSupport/Views/TbUsuarios/LoginPage.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGJVc3Vhcmlvc1xMb2dpblBhZ2UuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Thiago/source/repos/TPC_EcoSupport/Views/TbUsuarios/Usuarios.cshtml]

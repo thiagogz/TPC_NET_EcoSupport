@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using System.DirectoryServices.Protocols;
 using TPC_EcoSupport.Data;
 using TPC_EcoSupport.Models;
 
@@ -14,11 +16,57 @@ namespace TPC_EcoSupport.Controllers
             _context = context;
         }
 
-        // GET: TbEmpresas
         public async Task<IActionResult> Empresas()
         {
             return View(await _context.Empresas.ToListAsync());
         }
+
+        public async Task<IActionResult> DashEmpresas(decimal id)
+        {
+            // Buscando a empresa com as coleções relacionadas
+            var empresa = await _context.Empresas
+                .Include(e => e.Usuarios)
+                .Include(e => e.Contratos)
+                .Include(e => e.Servicos)
+                .FirstOrDefaultAsync(e => e.Id == id);
+
+            if (empresa == null)
+            {
+                return NotFound();
+            }
+
+            // Consumir a API para obter dados de exibição
+            var client = new HttpClient();
+            var response = await client.GetAsync("http://ecosupport-production.up.railway.app/exibicoes");
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(jsonString);
+
+            if (apiResponse != null && apiResponse.Embedded != null && apiResponse.Embedded.ExibicaoList != null)
+            {
+                ViewBag.ExibicaoList = apiResponse.Embedded.ExibicaoList
+                    .Where(e => e.Transacao.Contrato.Empresa.Id == id)
+                    .ToList();
+                ViewBag.Transacao = apiResponse.Embedded.ExibicaoList
+                    .Where(e => e.Transacao.Contrato.Empresa.Id == id)
+                    .Select(e => e.Transacao)
+                    .FirstOrDefault();
+                ViewBag.Contrato = apiResponse.Embedded.ExibicaoList
+                    .Where(e => e.Transacao.Contrato.Empresa.Id == id)
+                    .Select(e => e.Transacao.Contrato)
+                    .FirstOrDefault();
+            }
+            else
+            {
+                // Se a resposta da API ou a lista de exibições estiverem nulas, defina as ViewBags como vazias
+                ViewBag.ExibicaoList = new List<Exibicao>();
+                ViewBag.Transacao = null;
+                ViewBag.Contrato = null;
+            }
+
+            return View(empresa);
+        }
+
+
 
         // GET: TbEmpresas/Details/5
         public async Task<IActionResult> Details(decimal? id)

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TPC_EcoSupport")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c134fcebf225721da94545da48b516c5850d19a7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+007da72a863cf71cb51b09bcbf5bf308e2ec3f27")]
 [assembly: System.Reflection.AssemblyProductAttribute("TPC_EcoSupport")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TPC_EcoSupport")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

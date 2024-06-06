@@ -14,13 +14,21 @@ namespace TPC_EcoSupport.Controllers
             _context = context;
         }
 
-        // GET: TbUsuarios
         public async Task<IActionResult> Usuarios()
         {
             return View(await _context.Usuarios.ToListAsync());
         }
 
-        // GET: TbUsuarios/Details/5
+        public IActionResult CadastroPage()
+        {
+            return View();
+        }
+
+        public IActionResult LoginPage()
+        {
+            return View();
+        }
+
         public async Task<IActionResult> Details(decimal? id)
         {
             if (id == null)
@@ -38,27 +46,82 @@ namespace TPC_EcoSupport.Controllers
             return View(tbUsuarios);
         }
 
-        // GET: TbUsuarios/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: TbUsuarios/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nome,Email,Senha,Tipo,IdEmpresa,IdInstituicao,IdPessoaFisica")] TbUsuarios tbUsuarios)
+        public async Task<IActionResult> CadastrarUsuario([Bind("Nome,Email,Senha,Tipo")] TbUsuarios tbUsuarios)
         {
             if (ModelState.IsValid)
             {
+                // Reset IDs based on the selected type
+                if (tbUsuarios.Tipo == "pf")
+                {
+                    tbUsuarios.IdEmpresa = null;
+                    tbUsuarios.IdInstituicao = null;
+                    tbUsuarios.IdPessoaFisica = 1;
+                }
+                else if (tbUsuarios.Tipo == "empresa")
+                {
+                    tbUsuarios.IdEmpresa = 1;
+                    tbUsuarios.IdInstituicao = null;
+                    tbUsuarios.IdPessoaFisica = null;
+                }
+                else if (tbUsuarios.Tipo == "instituicao")
+                {
+                    tbUsuarios.IdEmpresa = null;
+                    tbUsuarios.IdInstituicao = 1;
+                    tbUsuarios.IdPessoaFisica = null;
+                }
+
                 _context.Add(tbUsuarios);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Usuarios));
             }
             return View(tbUsuarios);
         }
 
-        // GET: TbUsuarios/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EfetuarLogin(string Email, string Senha)
+        {
+            if (string.IsNullOrEmpty(Email) || string.IsNullOrEmpty(Senha))
+            {
+                // Adicionar mensagem de erro, se necessário
+                return BadRequest("E-mail ou senha não inseridos!");
+            }
+
+            var usuario = await _context.Usuarios
+                .Include(u => u.Empresa)
+                .Include(u => u.PessoaFisica)
+                .Include(u => u.Instituicao)
+                .FirstOrDefaultAsync(u => u.Email == Email);
+
+            if (usuario == null)
+            {
+                return BadRequest("Usuário não encontrado.");
+            }
+
+            if (usuario.Senha != Senha)
+            {
+                return BadRequest("Senha incorreta.");
+            }
+
+            // Redirecionar com base no tipo de usuário
+            if (usuario.Tipo == "pf")
+            {
+                return RedirectToAction("DashPessoaFisica", "TbPessoasFisicas", new { id = usuario.PessoaFisica.Id });
+            }
+            else if (usuario.Tipo == "empresa")
+            {
+                return RedirectToAction("DashEmpresas", "TbEmpresas", new { id = usuario.Empresa.Id });
+            }
+            else if (usuario.Tipo == "instituicao")
+            {
+                return RedirectToAction("DashInstituicoes", "TbInstituicoes", new { id = usuario.Instituicao.Id });
+            }
+
+            return View();
+        }
+
         public async Task<IActionResult> Edit(decimal? id)
         {
             if (id == null)

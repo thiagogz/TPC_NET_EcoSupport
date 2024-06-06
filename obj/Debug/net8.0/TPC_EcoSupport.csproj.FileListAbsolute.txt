@@ -111,3 +111,4 @@ C:\Users\Thiago\source\repos\TPC_EcoSupport\obj\Debug\net8.0\refint\TPC_EcoSuppo
 C:\Users\Thiago\source\repos\TPC_EcoSupport\obj\Debug\net8.0\TPC_EcoSupport.pdb
 C:\Users\Thiago\source\repos\TPC_EcoSupport\obj\Debug\net8.0\TPC_EcoSupport.genruntimeconfig.cache
 C:\Users\Thiago\source\repos\TPC_EcoSupport\obj\Debug\net8.0\ref\TPC_EcoSupport.dll
+C:\Users\Thiago\source\repos\TPC_EcoSupport\bin\Debug\net8.0\Newtonsoft.Json.dll

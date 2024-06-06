@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "POFp2t4aVGm/PFmIDjmVlo0D2ebaFfh8PdMJSj8XQ7yNtsxGBlqcdVcQXZzZdDAiQQ9Ery6oZzQ0rNNxzi+x1g==",
+  "dgSpecHash": "gWJPSGb9/AWW0JJCDEzdMNaQyDNVrv+jULmNrjCGHEL4zaMknoEGM+6DqZGttjc9L2bTxmCi1iRbuV2/aUSAwg==",
   "success": true,
   "projectFilePath": "C:\\Users\\Thiago\\source\\repos\\TPC_EcoSupport\\TPC_EcoSupport.csproj",
   "expectedPackageFiles": [
@@ -28,6 +28,7 @@
     "C:\\Users\\Thiago\\.nuget\\packages\\microsoft.extensions.options\\8.0.0\\microsoft.extensions.options.8.0.0.nupkg.sha512",
     "C:\\Users\\Thiago\\.nuget\\packages\\microsoft.extensions.primitives\\8.0.0\\microsoft.extensions.primitives.8.0.0.nupkg.sha512",
     "C:\\Users\\Thiago\\.nuget\\packages\\mono.texttemplating\\2.2.1\\mono.texttemplating.2.2.1.nupkg.sha512",
+    "C:\\Users\\Thiago\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
     "C:\\Users\\Thiago\\.nuget\\packages\\oracle.entityframeworkcore\\8.23.40\\oracle.entityframeworkcore.8.23.40.nupkg.sha512",
     "C:\\Users\\Thiago\\.nuget\\packages\\oracle.manageddataaccess\\23.4.0\\oracle.manageddataaccess.23.4.0.nupkg.sha512",
     "C:\\Users\\Thiago\\.nuget\\packages\\oracle.manageddataaccess.core\\23.4.0\\oracle.manageddataaccess.core.23.4.0.nupkg.sha512",
