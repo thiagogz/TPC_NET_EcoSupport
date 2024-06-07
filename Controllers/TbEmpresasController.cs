@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using System.DirectoryServices.Protocols;
 using TPC_EcoSupport.Data;
 using TPC_EcoSupport.Models;
 
@@ -34,34 +33,25 @@ namespace TPC_EcoSupport.Controllers
                 return NotFound();
             }
 
-            var client = new HttpClient();
-            var response = await client.GetAsync("http://ecosupport-production.up.railway.app/exibicoes");
-            var jsonString = await response.Content.ReadAsStringAsync();
-            var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(jsonString);
+            // Consultar as exibições diretamente do banco de dados
+            var exibicaoList = await _context.Exibicoes
+                .Include(e => e.Transacao)
+                .ThenInclude(t => t.Contrato)
+                .Where(e => e.Transacao.Contrato.Empresa.Id == id)
+                .ToListAsync();
 
-            if (apiResponse != null && apiResponse.Embedded != null && apiResponse.Embedded.ExibicaoList != null)
-            {
-                ViewBag.ExibicaoList = apiResponse.Embedded.ExibicaoList
-                    .Where(e => e.Transacao.Contrato.Empresa.Id == id)
-                    .ToList();
-                ViewBag.Transacao = apiResponse.Embedded.ExibicaoList
-                    .Where(e => e.Transacao.Contrato.Empresa.Id == id)
-                    .Select(e => e.Transacao)
-                    .FirstOrDefault();
-                ViewBag.Contrato = apiResponse.Embedded.ExibicaoList
-                    .Where(e => e.Transacao.Contrato.Empresa.Id == id)
-                    .Select(e => e.Transacao.Contrato)
-                    .FirstOrDefault();
-            }
-            else
-            {
-                ViewBag.ExibicaoList = new List<Exibicao>();
-                ViewBag.Transacao = null;
-                ViewBag.Contrato = null;
-            }
+            ViewBag.ExibicaoList = exibicaoList;
+
+            // Obter a primeira transação e contrato, se houver
+            var transacao = exibicaoList.Select(e => e.Transacao).FirstOrDefault();
+            var contrato = exibicaoList.Select(e => e.Transacao.Contrato).FirstOrDefault();
+
+            ViewBag.Transacao = transacao;
+            ViewBag.Contrato = contrato;
 
             return View(empresa);
         }
+
 
         public async Task<IActionResult> GetById(decimal? id)
         {

@@ -22,38 +22,27 @@ namespace TPC_EcoSupport.Controllers
 
         public async Task<IActionResult> DashPessoasFisicas(decimal? id)
         {
-            var pessoaFisica = await _context.PessoasFisicas
-                .FirstOrDefaultAsync(p => p.Id == id);
+            var pessoaFisica = await _context.PessoasFisicas.FirstOrDefaultAsync(p => p.Id == id);
 
             if (pessoaFisica == null)
             {
                 return NotFound();
             }
 
-            var client = new HttpClient();
-            var responseExibicoes = await client.GetAsync("http://ecosupport-production.up.railway.app/exibicoes");
-            var jsonStringExibicoes = await responseExibicoes.Content.ReadAsStringAsync();
-            var apiResponseExibicoes = JsonConvert.DeserializeObject<ApiResponse>(jsonStringExibicoes);
+            var exibicaoList = await _context.Exibicoes
+                .Include(e => e.Transacao)
+                .ThenInclude(t => t.Contrato)
+                .ToListAsync();
 
-            var responseInstituicoes = await client.GetAsync("http://ecosupport-production.up.railway.app/instituicoes");
-            var jsonStringInstituicoes = await responseInstituicoes.Content.ReadAsStringAsync();
-            var apiResponseInstituicoes = JsonConvert.DeserializeObject<ApiResponse>(jsonStringInstituicoes);
+            var instituicaoList = await _context.Instituicoes.ToListAsync();
 
-
-            if (apiResponseExibicoes != null && apiResponseExibicoes.Embedded != null && apiResponseExibicoes.Embedded.ExibicaoList != null &&
-        apiResponseInstituicoes != null && apiResponseInstituicoes.Embedded != null && apiResponseInstituicoes.Embedded.InstituicaoList != null)
-            {
-                ViewBag.ExibicaoList = apiResponseExibicoes.Embedded.ExibicaoList;
-                ViewBag.InstituicaoList = apiResponseInstituicoes.Embedded.InstituicaoList;
-            }
-            else
-            {
-                ViewBag.ExibicaoList = new List<Exibicao>();
-                ViewBag.InstituicaoList = new List<Instituicao>();
-            }
+            ViewBag.ExibicaoList = exibicaoList;
+            ViewBag.InstituicaoList = instituicaoList;
 
             return View(pessoaFisica);
         }
+
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]

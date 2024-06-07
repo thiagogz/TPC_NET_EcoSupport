@@ -2,8 +2,8 @@
 
 @{
     ViewData["Title"] = "Dashboard Pessoas Físicas";
-    var exibicaoList = ViewBag.ExibicaoList as List<TPC_EcoSupport.Models.Exibicao>;
-    var instituicaoList = ViewBag.InstituicaoList as List<TPC_EcoSupport.Models.Instituicao>;
+    var exibicaoList = ViewBag.ExibicaoList as List<TPC_EcoSupport.Models.TbExibicoes>;
+    var instituicaoList = ViewBag.InstituicaoList as List<TPC_EcoSupport.Models.TbInstituicoes>;
 }
 
 <section class="content" style="padding-top: 1vh; background-color: #f8f9fa; color: #343a40;">
@@ -19,7 +19,7 @@
                         }
                         else
                         {
-                            <p class="text-center">Informações da instituição não disponíveis.</p>
+                            <p class="text-center">Informações da pessoa física não disponíveis.</p>
                         }
                     </div>
                 </div>
@@ -38,7 +38,7 @@
                         }
                         else
                         {
-                            <p class="text-center">Informações da instituição não disponíveis.</p>
+                            <p class="text-center">Informações da pessoa física não disponíveis.</p>
                         }
                     </div>
                 </div>
@@ -47,7 +47,7 @@
         <div class="row mt-4">
             <div class="col-md-9" style="width: -webkit-fill-available;">
                 <div class="card" style="border: 1px solid rgba(0, 0, 0, .125); border-radius: .25rem;">
-                    @if (exibicaoList != null && exibicaoList.Count > 0 && instituicaoList != null && instituicaoList.Count > 0)
+                    @if (exibicaoList != null && exibicaoList.Any() && instituicaoList != null && instituicaoList.Any())
                     {
                         @foreach (var exibicao in exibicaoList)
                         {
@@ -96,11 +96,11 @@
                     }
                     else
                     {
-                        <p class="text-center">Nenhuma exibição encontrada para esta instituição.</p>
+                        <p class="text-center">Nenhuma exibição encontrada.</p>
                     }
-                    </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+

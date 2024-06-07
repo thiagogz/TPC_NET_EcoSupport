@@ -2,9 +2,9 @@
 
 @{
     ViewData["Title"] = "Dashboard Empresa";
-    var exibicaoList = ViewBag.ExibicaoList as List<TPC_EcoSupport.Models.Exibicao>;
-    var transacao = ViewBag.Transacao as TPC_EcoSupport.Models.Transacao;
-    var contrato = ViewBag.Contrato as TPC_EcoSupport.Models.Contrato;
+    var exibicaoList = ViewBag.ExibicaoList as List<TPC_EcoSupport.Models.TbExibicoes>;
+    var transacao = ViewBag.Transacao as TPC_EcoSupport.Models.TbTransacoes;
+    var contrato = ViewBag.Contrato as TPC_EcoSupport.Models.TbContratos;
 }
 
 <section class="content" style="padding-top: 1vh; background-color: #f8f9fa; color: #343a40;">
@@ -36,31 +36,32 @@
             <div class="col-md-9" style="width: -webkit-fill-available;">
                 <div class="card" style="border: 1px solid rgba(0, 0, 0, .125); border-radius: .25rem;">
                     <div class="card-body" style="display: flex; justify-content: space-evenly;">
-                        @if (exibicaoList != null && exibicaoList.Count > 0) 
+                        @if (exibicaoList != null && exibicaoList.Count > 0)
                         {
-                            @foreach (var exibicao in exibicaoList){
-                            <div style="display: flex; flex-direction: column; align-items: center;">
-                                <h3 style="border: 1px solid rgba(0, 0, 0, .5); border-radius: .25rem; padding: 0.25rem .75rem; margin-bottom: 0;">Informações de Contratos</h3>
-                                <p><strong>Tipo:</strong> @contrato.TipoContrato</p>
-                                <p><strong>Data Início:</strong> @contrato.DataInicio.ToShortDateString()</p>
-                                <p><strong>Data Fim:</strong> @contrato.DataFim.ToShortDateString()</p>
-                                <p><strong>Valor:</strong> @contrato.Valor.ToString("C")</p>
-                                <p><strong>Status:</strong> @contrato.Status</p>
-                            </div>
-                            <div style="display: flex; flex-direction: column; align-items: center;">
-                                <h3 style="border: 1px solid rgba(0, 0, 0, .5); border-radius: .25rem; padding: 0.25rem .75rem; margin-bottom: 0;">Última Transação</h3>
-                                <p><strong>Data:</strong> @transacao.Data.ToShortDateString()</p>
-                                <p><strong>Valor:</strong> @transacao.Valor.ToString("C")</p>
-                                <p><strong>Descrição:</strong> @transacao.Descricao</p>
-                            </div>
-                            <div style="display: flex; flex-direction: column; align-items: center;">
-                                <h3 style="border: 1px solid rgba(0, 0, 0, .5); border-radius: .25rem; padding: 0.25rem .75rem; margin-bottom: 0;">Exibição</h3>
-                                <p><strong>Data Exibição:</strong> @exibicao.DataExibicao.ToShortDateString()</p>
-                                <p><strong>Valor:</strong> @exibicao.Valor.ToString("C")</p>
-                                <p><strong>Descrição:</strong> @exibicao.Descricao</p>
-                            </div>
+                            @foreach (var exibicao in exibicaoList)
+                            {
+                                <div style="display: flex; flex-direction: column; align-items: center;">
+                                    <h3 style="border: 1px solid rgba(0, 0, 0, .5); border-radius: .25rem; padding: 0.25rem .75rem; margin-bottom: 0;">Informações de Contratos</h3>
+                                    <p><strong>Tipo:</strong> @contrato.TipoContrato</p>
+                                    <p><strong>Data Início:</strong> @contrato.DataInicio.ToShortDateString()</p>
+                                    <p><strong>Data Fim:</strong> @contrato.DataFim.ToShortDateString()</p>
+                                    <p><strong>Valor:</strong> @contrato.Valor.ToString("C")</p>
+                                    <p><strong>Status:</strong> @contrato.Status</p>
+                                </div>
+                                <div style="display: flex; flex-direction: column; align-items: center;">
+                                    <h3 style="border: 1px solid rgba(0, 0, 0, .5); border-radius: .25rem; padding: 0.25rem .75rem; margin-bottom: 0;">Última Transação</h3>
+                                    <p><strong>Data:</strong> @transacao.Data.ToShortDateString()</p>
+                                    <p><strong>Valor:</strong> @transacao.Valor.ToString("C")</p>
+                                    <p><strong>Descrição:</strong> @transacao.Descricao</p>
+                                </div>
+                                <div style="display: flex; flex-direction: column; align-items: center;">
+                                    <h3 style="border: 1px solid rgba(0, 0, 0, .5); border-radius: .25rem; padding: 0.25rem .75rem; margin-bottom: 0;">Exibição</h3>
+                                    <p><strong>Data Exibição:</strong> @exibicao.DataExibicao.ToShortDateString()</p>
+                                    <p><strong>Valor:</strong> @exibicao.Valor.ToString("C")</p>
+                                    <p><strong>Descrição:</strong> @exibicao.Descricao</p>
+                                </div>
                             }
-                        } 
+                        }
                         else
                         {
                             <p class="text-center">Nenhuma exibição encontrada para esta empresa.</p>
@@ -71,4 +72,5 @@
         </div>
     </div>
 </section>
+
 

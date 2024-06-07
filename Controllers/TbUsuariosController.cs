@@ -105,7 +105,7 @@ namespace TPC_EcoSupport.Controllers
 
             if (usuario.Tipo == "pf")
             {
-                return RedirectToAction("DashPessoaFisica", "TbPessoasFisicas", new { id = usuario.PessoaFisica.Id });
+                return RedirectToAction("DashPessoasFisicas", "TbPessoasFisicas", new { id = usuario.PessoaFisica.Id });
             }
             else if (usuario.Tipo == "empresa")
             {

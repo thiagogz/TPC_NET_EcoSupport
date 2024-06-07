@@ -2,9 +2,9 @@
 
 @{
     ViewData["Title"] = "Dashboard Instituição";
-    var exibicaoList = ViewBag.ExibicaoList as List<TPC_EcoSupport.Models.Exibicao>;
-    var transacao = ViewBag.Transacao as TPC_EcoSupport.Models.Transacao;
-    var contrato = ViewBag.Contrato as TPC_EcoSupport.Models.Contrato;
+    var exibicaoList = ViewBag.ExibicaoList as List<TPC_EcoSupport.Models.TbExibicoes>;
+    var transacao = ViewBag.Transacao as TPC_EcoSupport.Models.TbTransacoes;
+    var contrato = ViewBag.Contrato as TPC_EcoSupport.Models.TbContratos;
 }
 
 <section class="content" style="padding-top: 1vh; background-color: #f8f9fa; color: #343a40;">
@@ -52,7 +52,7 @@
                     <div class="card-body" style="display: flex; justify-content: space-evenly;">
                         @if (exibicaoList != null && exibicaoList.Count > 0 && Model != null)
                         {
-                            @foreach (var exibicao in exibicaoList.Where(e => e.Id == Model.Id))
+                            @foreach (var exibicao in exibicaoList)
                             {
                                 <div style="display: flex; flex-direction: column; align-items: center;">
                                     <h3 style="border: 1px solid rgba(0, 0, 0, .5); border-radius: .25rem; padding: 0.25rem .75rem; margin-bottom: 0;">Informações de Contratos</h3>
@@ -86,4 +86,5 @@
         </div>
     </div>
 </section>
+
 

@@ -8,7 +8,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<DataContext>(options =>
 {
     options.UseOracle(builder.Configuration.GetConnectionString("OracleConnection"));
-});
+}, ServiceLifetime.Singleton);
 
 var app = builder.Build();
 

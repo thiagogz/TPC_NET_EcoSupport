@@ -35,34 +35,25 @@ namespace TPC_EcoSupport.Controllers
                 return NotFound();
             }
 
-            var client = new HttpClient();
-            var response = await client.GetAsync("http://ecosupport-production.up.railway.app/exibicoes");
-            var jsonString = await response.Content.ReadAsStringAsync();
-            var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(jsonString);
+            // Query the database for the exhibitions (exibicoes) related to the institution's transactions
+            var exibicoesList = await _context.Exibicoes
+                .Include(e => e.Transacao)
+                .ThenInclude(t => t.Contrato)
+                .Where(e => e.Transacao.Contrato.Empresa.Id == id)
+                .ToListAsync();
 
-            if (apiResponse != null && apiResponse.Embedded != null && apiResponse.Embedded.ExibicaoList != null)
-            {
-                ViewBag.ExibicaoList = apiResponse.Embedded.ExibicaoList
-                    .Where(e => e.Transacao.Contrato.Empresa.Id == id)
-                    .ToList();
-                ViewBag.Transacao = apiResponse.Embedded.ExibicaoList
-                    .Where(e => e.Transacao.Contrato.Empresa.Id == id)
-                    .Select(e => e.Transacao)
-                    .FirstOrDefault();
-                ViewBag.Contrato = apiResponse.Embedded.ExibicaoList
-                    .Where(e => e.Transacao.Contrato.Empresa.Id == id)
-                    .Select(e => e.Transacao.Contrato)
-                    .FirstOrDefault();
-            }
-            else
-            {
-                ViewBag.ExibicaoList = new List<Exibicao>();
-                ViewBag.Transacao = null;
-                ViewBag.Contrato = null;
-            }
+            ViewBag.ExibicaoList = exibicoesList;
+
+            // Assuming there is only one transaction and one contract per exhibition list
+            var transacao = exibicoesList.Select(e => e.Transacao).FirstOrDefault();
+            var contrato = exibicoesList.Select(e => e.Transacao.Contrato).FirstOrDefault();
+
+            ViewBag.Transacao = transacao;
+            ViewBag.Contrato = contrato;
 
             return View(tbInstituicoes);
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
